@@ -10,7 +10,7 @@ public class RaycastGridCone : MonoBehaviour
     public float coneAngle = 30f; // Angle of the cone in degrees
     public float squareSize = 0.1f;
     public float extrusionThickness = 0.5f;
-    public float moveDistance = 20.0f;
+    public float moveDistanceFraction = 0.5f;
 
     private List<Vector3> wallHitPoints = new List<Vector3>();
 
@@ -67,18 +67,36 @@ public class RaycastGridCone : MonoBehaviour
             }
             if (wallHitPoints.Count > 2)
             {
+                MovePointsTowardsCamera(wallHitPoints, moveDistanceFraction);
                 CreateColliderFromShape(wallHitPoints, extrusionThickness);
             }
         }
     }
-void CreateColliderFromShape(List<Vector3> points, float thickness)
+
+    void MovePointsTowardsCamera(List<Vector3> points, float distanceFraction)
+    {
+        float length;
+        if (targetCamera == null)
+            return;
+
+        Vector3 cameraPosition = targetCamera.transform.position;
+
+        for (int i = 0; i < points.Count; i++)
+        {
+            length = (cameraPosition - points[i]).magnitude * distanceFraction;
+            Vector3 directionToCamera = (cameraPosition - points[i]).normalized;
+            points[i] += directionToCamera * length;
+        }
+    }
+
+    void CreateColliderFromShape(List<Vector3> points, float thickness)
     {
         // Sort points in clockwise or counterclockwise order
         points = SortPointsClockwise(points);
 
         // Create a new GameObject to hold the collider
         GameObject shapeObject = new GameObject("ExtrudedCollider");
-        //shapeObject.transform.position = Vector3.zero;
+        shapeObject.transform.position = Vector3.zero;
 
         // Generate the mesh
         Mesh mesh = GenerateExtrudedMesh(points, thickness);
@@ -90,14 +108,6 @@ void CreateColliderFromShape(List<Vector3> points, float thickness)
         meshCollider.sharedMesh = mesh;
         meshCollider.convex = true; // Use convex for proper collision detection
 
-        // if (targetCamera != null)
-        // {
-        //     Vector3 directionToCamera = (targetCamera.transform.position - shapeObject.transform.position).normalized;
-        //     Debug.Log(targetCamera.transform.position);
-        //     Debug.Log(shapeObject.transform.position);
-        //     Debug.Log(directionToCamera);
-        //     shapeObject.transform.position += directionToCamera * moveDistance;
-        // }
     }
 
     List<Vector3> SortPointsClockwise(List<Vector3> points)

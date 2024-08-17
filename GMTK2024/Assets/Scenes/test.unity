@@ -320,11 +320,11 @@ MonoBehaviour:
   targetCamera: {fileID: 758436807}
   rayOrigin: {fileID: 771338760}
   rayDistance: 100
-  gridResolution: 100
+  gridResolution: 120
   coneAngle: 90
   squareSize: 0.1
   extrusionThickness: 0.5
-  moveDistance: 5
+  moveDistanceFraction: 0.43
 --- !u!114 &771338758
 MonoBehaviour:
   m_ObjectHideFlags: 0
