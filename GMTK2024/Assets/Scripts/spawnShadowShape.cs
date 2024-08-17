@@ -1,185 +1,164 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
-public class spawnShadowShape : MonoBehaviour
-{
-    public Camera targetCamera;
-    public Collider targetCollider;
-    public Transform startPoint;
-    public float rayDistance = 100f;
-    public int gridResolution = 10; // 10x10 grid
-    public float coneAngle = 30f; // Angle of the cone in degrees
-    public float squareSize = 0.1f;
-    public float extrusionThickness = 0.5f;
-    public float moveDistanceFraction = 0.5f;
+public class spawnShadowShape : MonoBehaviour{
+	public Camera targetCamera;
+	public Collider targetCollider;
+	public Transform startPoint;
+	public float rayDistance = 100f;
+	public float extrusionThickness = 0.5f;
+	public float moveDistanceFraction = 0.5f;
 
-    private List<Vector3> wallHitPoints = new List<Vector3>();
+	private List<Vector3> wallHitPoints = new List<Vector3>();
 
-    void Update()
-    {
-        wallHitPoints.Clear();
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (targetCollider is MeshCollider meshCollider)
-            {
-                Mesh mesh = meshCollider.sharedMesh;
-                Vector3[] vertices = mesh.vertices;
-                Transform colliderTransform = targetCollider.transform;
+	void Update(){
+		wallHitPoints.Clear();
+		if (Input.GetMouseButtonDown(0)){
+			if (targetCollider is MeshCollider meshCollider){
+				Mesh mesh = meshCollider.sharedMesh;
+				Vector3[] vertices = mesh.vertices;
+				Transform colliderTransform = targetCollider.transform;
 
-                foreach (Vector3 vertex in vertices)
-                {
-                    // Convert vertex position to world space
-                    Vector3 worldVertex = colliderTransform.TransformPoint(vertex);
+				foreach (Vector3 vertex in vertices){
+					// Convert vertex position to world space
+					Vector3 worldVertex = colliderTransform.TransformPoint(vertex);
 
-                    // Cast a ray towards the vertex from a point (e.g., the camera or a specific point in the scene)
-                    Ray ray = new Ray(startPoint.position, (worldVertex - startPoint.position).normalized);
-                    RaycastHit[] hits;
+					// Cast a ray towards the vertex from a point (e.g., the camera or a specific point in the scene)
+					Ray ray = new Ray(startPoint.position, (worldVertex - startPoint.position).normalized);
+					RaycastHit[] hits;
 
-                    // Perform the raycast and get all hits
-                    hits = Physics.RaycastAll(ray, rayDistance);
+					int l = 1 << LayerMask.NameToLayer("Wall");
 
-                    // Sort the hits by distance
-                    System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
+					// Perform the raycast and get all hits
+					hits = Physics.RaycastAll(ray, rayDistance, l);
 
-                    // Draw the ray in the editor
-                    // Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red, 2.0f);
+					// Sort the hits by distance
+					System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
 
-                    // bool passedThroughPlatform = false;
+					// Draw the ray in the editor
+					// Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red, 2.0f);
 
-                    // Iterate through the hits
-                    foreach (RaycastHit hit in hits)
-                    {
-                        // Check if the ray has hit an object tagged "wall" after passing through a platform
-                        if (hit.collider.CompareTag("Wall"))
-                        {
-                            Debug.Log("Hit a wall after passing through a platform: " + hit.collider.name);
-                            wallHitPoints.Add(hit.point);
-                            // Perform any additional actions here, like drawing a debug line
-                            Debug.DrawLine(ray.origin, hit.point, Color.green, 200.0f);
-                        }
-                    }
-                }
+					// bool passedThroughPlatform = false;
 
-                if (wallHitPoints.Count > 2)
-                {
-                    // Move hit points towards the camera before creating the collider
-                    MovePointsTowardsCamera(wallHitPoints, moveDistanceFraction);
-                    CreateColliderFromShape(wallHitPoints, extrusionThickness);
-                }
-            }
-            else
-            {
-                Debug.LogError("Target collider is not a MeshCollider.");
-            }
-        }
-    }
+					// Iterate through the hits
+					foreach (RaycastHit hit in hits){
+						Debug.Log("Hit a wall after passing through a platform: " + hit.collider.name);
+						wallHitPoints.Add(hit.point);
+						// Perform any additional actions here, like drawing a debug line
+						// Debug.DrawLine(ray.origin, hit.point, Color.green, 200.0f);
+					}
+				}
 
-    void MovePointsTowardsCamera(List<Vector3> points, float distanceFraction)
-    {
-        float length;
-        if (targetCamera == null)
-            return;
+				if (wallHitPoints.Count > 2){
+					// Move hit points towards the camera before creating the collider
+					MovePointsTowardsCamera(wallHitPoints, moveDistanceFraction);
+					CreateColliderFromShape(wallHitPoints, extrusionThickness);
+				}
+			}
+			else{
+				Debug.LogError("Target collider is not a MeshCollider.");
+			}
+		}
+	}
 
-        Vector3 cameraPosition = targetCamera.transform.position;
+	void MovePointsTowardsCamera(List<Vector3> points, float distanceFraction){
+		float length;
+		if (targetCamera == null)
+			return;
 
-        for (int i = 0; i < points.Count; i++)
-        {
-            length = (cameraPosition - points[i]).magnitude * distanceFraction;
-            Vector3 directionToCamera = (cameraPosition - points[i]).normalized;
-            points[i] += directionToCamera * length;
-        }
-    }
+		Vector3 cameraPosition = targetCamera.transform.position;
 
-    void CreateColliderFromShape(List<Vector3> points, float thickness)
-    {
-        // Sort points in clockwise or counterclockwise order
-        points = SortPointsClockwise(points);
+		for (int i = 0; i < points.Count; i++){
+			length = (cameraPosition - points[i]).magnitude * distanceFraction;
+			Vector3 directionToCamera = (cameraPosition - points[i]).normalized;
+			points[i] += directionToCamera * length;
+		}
+	}
 
-        // Create a new GameObject to hold the collider
-        GameObject shapeObject = new GameObject("ExtrudedCollider");
-        shapeObject.transform.position = Vector3.zero;
+	void CreateColliderFromShape(List<Vector3> points, float thickness){
+		// Sort points in clockwise or counterclockwise order
+		points = SortPointsClockwise(points);
 
-        // Generate the mesh
-        Mesh mesh = GenerateExtrudedMesh(points, thickness);
-        MeshFilter meshFilter = shapeObject.AddComponent<MeshFilter>();
-        meshFilter.mesh = mesh;
+		// Create a new GameObject to hold the collider
+		GameObject shapeObject = new GameObject("ExtrudedCollider");
+		shapeObject.transform.position = Vector3.zero;
 
-        // Add a MeshCollider
-        MeshCollider meshCollider = shapeObject.AddComponent<MeshCollider>();
-        meshCollider.sharedMesh = mesh;
-        meshCollider.convex = true; // Use convex for proper collision detection
+		// Generate the mesh
+		Mesh mesh = GenerateExtrudedMesh(points, thickness);
+		MeshFilter meshFilter = shapeObject.AddComponent<MeshFilter>();
+		meshFilter.mesh = mesh;
 
-    }
+		// Add a MeshCollider
+		MeshCollider meshCollider = shapeObject.AddComponent<MeshCollider>();
+		meshCollider.sharedMesh = mesh;
+		meshCollider.convex = true; // Use convex for proper collision detection
+	}
 
-    List<Vector3> SortPointsClockwise(List<Vector3> points)
-    {
-        Vector3 center = Vector3.zero;
-        foreach (var point in points)
-        {
-            center += point;
-        }
-        center /= points.Count;
+	List<Vector3> SortPointsClockwise(List<Vector3> points){
+		Vector3 center = Vector3.zero;
+		foreach (var point in points){
+			center += point;
+		}
 
-        points.Sort((a, b) => Mathf.Atan2(a.y - center.y, a.x - center.x)
-                        .CompareTo(Mathf.Atan2(b.y - center.y, b.x - center.x)));
+		center /= points.Count;
 
-        return points;
-    }
+		points.Sort((a, b) => Mathf.Atan2(a.y - center.y, a.x - center.x)
+			.CompareTo(Mathf.Atan2(b.y - center.y, b.x - center.x)));
 
-    Mesh GenerateExtrudedMesh(List<Vector3> points, float thickness)
-    {
-        Mesh mesh = new Mesh();
+		return points;
+	}
 
-        // Define vertices
-        Vector3[] vertices = new Vector3[points.Count * 2];
-        int[] triangles = new int[(points.Count - 2) * 6 + points.Count * 6];
-        Vector3[] normals = new Vector3[vertices.Length];
-        Vector2[] uv = new Vector2[vertices.Length];
+	Mesh GenerateExtrudedMesh(List<Vector3> points, float thickness){
+		Mesh mesh = new Mesh();
 
-        for (int i = 0; i < points.Count; i++)
-        {
-            vertices[i] = points[i];
-            vertices[i + points.Count] = points[i] + Vector3.forward * thickness;
-            normals[i] = -Vector3.forward;
-            normals[i + points.Count] = Vector3.forward;
-            uv[i] = new Vector2(vertices[i].x, vertices[i].y);
-            uv[i + points.Count] = new Vector2(vertices[i + points.Count].x, vertices[i + points.Count].y);
-        }
+		// Define vertices
+		Vector3[] vertices = new Vector3[points.Count * 2];
+		int[] triangles = new int[(points.Count - 2) * 6 + points.Count * 6];
+		Vector3[] normals = new Vector3[vertices.Length];
+		Vector2[] uv = new Vector2[vertices.Length];
 
-        // Create the triangles
-        int triIndex = 0;
-        for (int i = 0; i < points.Count - 2; i++)
-        {
-            triangles[triIndex++] = 0;
-            triangles[triIndex++] = i + 1;
-            triangles[triIndex++] = i + 2;
+		for (int i = 0; i < points.Count; i++){
+			vertices[i] = points[i];
+			vertices[i + points.Count] = points[i] + Vector3.forward * thickness;
+			normals[i] = -Vector3.forward;
+			normals[i + points.Count] = Vector3.forward;
+			uv[i] = new Vector2(vertices[i].x, vertices[i].y);
+			uv[i + points.Count] = new Vector2(vertices[i + points.Count].x, vertices[i + points.Count].y);
+		}
 
-            triangles[triIndex++] = points.Count;
-            triangles[triIndex++] = points.Count + i + 2;
-            triangles[triIndex++] = points.Count + i + 1;
-        }
+		// Create the triangles
+		int triIndex = 0;
+		for (int i = 0; i < points.Count - 2; i++){
+			triangles[triIndex++] = 0;
+			triangles[triIndex++] = i + 1;
+			triangles[triIndex++] = i + 2;
 
-        for (int i = 0; i < points.Count; i++)
-        {
-            int next = (i + 1) % points.Count;
-            triangles[triIndex++] = i;
-            triangles[triIndex++] = next;
-            triangles[triIndex++] = i + points.Count;
+			triangles[triIndex++] = points.Count;
+			triangles[triIndex++] = points.Count + i + 2;
+			triangles[triIndex++] = points.Count + i + 1;
+		}
 
-            triangles[triIndex++] = next;
-            triangles[triIndex++] = next + points.Count;
-            triangles[triIndex++] = i + points.Count;
-        }
+		for (int i = 0; i < points.Count; i++){
+			int next = (i + 1) % points.Count;
+			triangles[triIndex++] = i;
+			triangles[triIndex++] = next;
+			triangles[triIndex++] = i + points.Count;
 
-        // Assign to mesh
-        mesh.vertices = vertices;
-        mesh.triangles = triangles;
-        mesh.normals = normals;
-        mesh.uv = uv;
+			triangles[triIndex++] = next;
+			triangles[triIndex++] = next + points.Count;
+			triangles[triIndex++] = i + points.Count;
+		}
 
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
+		// Assign to mesh
+		mesh.vertices = vertices;
+		mesh.triangles = triangles;
+		mesh.normals = normals;
+		mesh.uv = uv;
 
-        return mesh;
-    }
+		mesh.RecalculateNormals();
+		mesh.RecalculateBounds();
+
+		return mesh;
+	}
 }
