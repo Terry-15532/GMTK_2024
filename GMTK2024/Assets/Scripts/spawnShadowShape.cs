@@ -6,6 +6,7 @@ public class spawnShadowShape : MonoBehaviour
     public Camera targetCamera;
     public Collider targetCollider;
     public Transform startPoint;
+    public PhysicsMaterial material;
     public float rayDistance = 100f;
     public int gridResolution = 10; // 10x10 grid
     public float coneAngle = 30f; // Angle of the cone in degrees
@@ -108,6 +109,7 @@ public class spawnShadowShape : MonoBehaviour
         MeshCollider meshCollider = shapeObject.AddComponent<MeshCollider>();
         meshCollider.sharedMesh = mesh;
         meshCollider.convex = true; // Use convex for proper collision detection
+        meshCollider.material = material;
 
     }
 
@@ -179,7 +181,7 @@ public class spawnShadowShape : MonoBehaviour
 
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
-
+        
         return mesh;
     }
 }
