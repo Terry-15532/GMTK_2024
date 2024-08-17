@@ -15,7 +15,7 @@ public class ShadowCastingPlatform : MonoBehaviour{
 
 	public void Start(){
 		cameraPos = GameInfo.mainCamera.transform;
-		lightPos = Stage.instance.light.transform;
+		lightPos = Stage.instance.currLight.transform;
 		collider = new GameObject("ExtrudedCollider").AddComponent<MeshCollider>();
 		collider.gameObject.AddComponent<MeshFilter>();
 		collider.gameObject.AddComponent<MeshRenderer>();

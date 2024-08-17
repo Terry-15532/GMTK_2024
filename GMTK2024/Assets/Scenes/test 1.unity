@@ -779,7 +779,7 @@ MonoBehaviour:
   updateShadow:
     m_PersistentCalls:
       m_Calls: []
-  shadowColliderMat: {fileID: 0}
+  shadowColliderMat: {fileID: 2100000, guid: 99eb5a207d3388b4daaa22839ada6f36, type: 2}
 --- !u!1 &2025505838
 GameObject:
   m_ObjectHideFlags: 0

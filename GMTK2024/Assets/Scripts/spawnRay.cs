@@ -14,7 +14,7 @@ public class RaycastGridCone : MonoBehaviour
 
     private List<Vector3> wallHitPoints = new List<Vector3>();
 
-    void Update()
+    void Check()
     {
         wallHitPoints.Clear();
         if (Input.GetMouseButtonDown(0))
@@ -36,7 +36,7 @@ public class RaycastGridCone : MonoBehaviour
                     RaycastHit[] hits;
 
                     // Perform the raycast and get all hits
-                    hits = Physics.RaycastAll(ray, rayDistance);
+                    hits = Physics.RaycastAll(ray, rayDistance, Stage.wallLayer);
 
                     // Sort the hits by distance
                     System.Array.Sort(hits, (x, y) => x.distance.CompareTo(y.distance));
