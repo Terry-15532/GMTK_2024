@@ -11,16 +11,16 @@ public class ShadowCastingPlatform : MonoBehaviour{
 	public float moveDistanceFraction = 0.5f;
 	private List<Vector3> wallHitPoints = new List<Vector3>();
 
-	public Collider collider;
+	[FormerlySerializedAs("collider")] public Collider c;
 
 	public void Start(){
 		cameraPos = GameInfo.mainCamera.transform;
 		lightPos = Stage.instance.currLight.transform;
-		collider = new GameObject("ExtrudedCollider").AddComponent<MeshCollider>();
-		collider.gameObject.AddComponent<MeshFilter>();
-		collider.gameObject.AddComponent<MeshRenderer>();
-		collider.GetComponent<MeshRenderer>().materials[0] = Stage.instance.shadowColliderMat;
-		Stage.instance.updateShadow.AddListener(UpdateShadowCollider);
+		c = new GameObject("ExtrudedCollider").AddComponent<MeshCollider>();
+		c.gameObject.AddComponent<MeshFilter>();
+		c.gameObject.AddComponent<MeshRenderer>();
+		// collider.GetComponent<MeshRenderer>().materials[0] = Stage.instance.shadowColliderMat;
+		Stage.instance.updateShadowTrigger.AddListener(UpdateShadowCollider);
 	}
 
 	public void UpdateShadowCollider(){
@@ -52,8 +52,8 @@ public class ShadowCastingPlatform : MonoBehaviour{
 			if (wallHitPoints.Count > 2){
 				MovePointsTowardsCamera(wallHitPoints, moveDistanceFraction);
 				var m = CreateMeshFromShape(wallHitPoints, extrusionThickness);
-				collider.GetComponent<MeshFilter>().mesh = m;
-				collider.GetComponent<MeshCollider>().sharedMesh = m;
+				c.GetComponent<MeshFilter>().mesh = m;
+				c.GetComponent<MeshCollider>().sharedMesh = m;
 			}
 		}
 	}
@@ -75,7 +75,7 @@ public class ShadowCastingPlatform : MonoBehaviour{
 	Mesh CreateMeshFromShape(List<Vector3> points, float thickness){
 		points = SortPointsClockwise(points);
 
-		collider.transform.position = Vector3.zero;
+		c.transform.position = Vector3.zero;
 
 		return GenerateExtrudedMesh(points, thickness);
 	}

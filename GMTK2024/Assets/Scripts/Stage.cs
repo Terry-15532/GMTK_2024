@@ -8,27 +8,40 @@ public class Stage : MonoBehaviour{
 	public static int wallLayer;
 	public static int platformLayer;
 
-	public Light currLight;
+	public Transform currLight;
 
 	public int index;
 
-	public static Stage instance;
-	public UnityEvent updateShadow = new();
+	public int maxScalingOperation, scalingOperationLeft;
 
-	public Material shadowColliderMat;
+	public static Stage instance;
+	[FormerlySerializedAs("updateShadow")] public UnityEvent updateShadowTrigger = new();
+	public UnityEvent showOutline = new(), resetStage = new();
+
+	// public Material shadowColliderMat;
 
 	public void Awake(){
 		instance = this;
 		wallLayer = 1 << LayerMask.NameToLayer("Wall");
 		platformLayer = 1 << LayerMask.NameToLayer("Platform");
+		scalingOperationLeft = maxScalingOperation;
 	}
 
-	// public void Update(){
-	// 	var h = Input.GetAxis("Horizontal");
-	// 	var v = Input.GetAxis("Vertical");
-	// 	if (h + v != 0){
-	// 		currLight.transform.position += new Vector3(h, v, 0);
-	// 		updateShadow.Invoke();
-	// 	}
+	// public void Reset(){
+	// 	resetStage.Invoke();
 	// }
+
+	// public void ShowOutline(){
+	// 	showOutline.Invoke();
+	// }
+
+	public void Update(){
+		if (Input.GetKeyDown(KeyCode.O)){
+			showOutline.Invoke();
+		}
+
+		if (Input.GetKeyDown(KeyCode.R)){
+			resetStage.Invoke();
+		}
+	}
 }

@@ -183,7 +183,7 @@ public class ShadowChecker : MonoBehaviour{
 		Ray ray = new Ray(cameraPos, (pos - cameraPos).normalized);
 		// Debug.DrawRay(ray.origin, ray.direction, Color.cyan, 0.01f);
 		if (Physics.Raycast(ray, out RaycastHit hit, 100, Stage.wallLayer)){
-			ray.direction = Stage.instance.currLight.transform.position - hit.point;
+			ray.direction = Stage.instance.currLight.position - hit.point;
 			ray.origin = hit.point;
 			// Debug.DrawRay(ray.origin, ray.direction, Color.cyan, 0.01f);
 			if (Physics.Raycast(ray, 1000, Stage.platformLayer)){

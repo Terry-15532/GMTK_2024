@@ -21,7 +21,7 @@ public class Character : MonoBehaviour{
 	}
 
 	public void Update(){
-		jumpKeyDown = (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0));
+		jumpKeyDown = Input.GetKeyDown(KeyCode.Space);
 	}
 
 	public void FixedUpdate(){
@@ -42,11 +42,11 @@ public class Character : MonoBehaviour{
 
 		if (bottom && finalV.y <= 0){
 			canJump = true;
-			finalV.y = top ? 5 : 0;
+			finalV.y = top ? 3 : 0;
 			transform.position += new Vector3(0, bottomDist, 0);
 		}
 
-		if (top && finalV.y > 0){
+		else if (top && finalV.y > 0){
 			finalV.y = 0;
 			transform.position -= new Vector3(0, topDist, 0);
 		}
