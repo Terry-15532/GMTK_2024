@@ -261,7 +261,7 @@ public class spawnShadowShape : MonoBehaviour
 
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
-
+        
         return mesh;
     }
 
