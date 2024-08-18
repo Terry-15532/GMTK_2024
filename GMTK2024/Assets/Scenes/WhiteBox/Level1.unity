@@ -489,10 +489,9 @@ MonoBehaviour:
   material: {fileID: 0}
   rayDistance: 100
   gridResolution: 10
-  coneAngle: 30
-  squareSize: 0.1
   extrusionThickness: 1
   moveDistanceFraction: 0.3
+  intervalsPerEdge: 10
 --- !u!65 &73904445
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3701,10 +3700,9 @@ MonoBehaviour:
   material: {fileID: 0}
   rayDistance: 100
   gridResolution: 10
-  coneAngle: 30
-  squareSize: 0.1
   extrusionThickness: 1
   moveDistanceFraction: 0.3
+  intervalsPerEdge: 10
 --- !u!64 &784093389
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4327,7 +4325,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &942094045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4341,7 +4339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Priority:
-    Enabled: 0
+    Enabled: 1
     m_Value: 0
   OutputChannel: 1
   StandbyUpdate: 2
@@ -5077,6 +5075,7 @@ MonoBehaviour:
   body: {fileID: 1085473402}
   runSpeed: 20
   animator: {fileID: 1085473403}
+  gravity: {fileID: 0}
   jumpGrav: 0
   fallGrav: 0
 --- !u!114 &1085473405
@@ -6971,7 +6970,7 @@ Transform:
   m_GameObject: {fileID: 1707589078}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 22.97, y: 24.665283, z: -1.73}
+  m_LocalPosition: {x: 22.97, y: 24.665283, z: -2.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7336,7 +7335,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1820001136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7382,7 +7381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Priority:
-    Enabled: 0
+    Enabled: 1
     m_Value: 0
   OutputChannel: 1
   StandbyUpdate: 2
