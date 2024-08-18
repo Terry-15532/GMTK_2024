@@ -1,0 +1,69 @@
+using System;
+using Unity.VisualScripting;
+using UnityEngine;
+
+[RequireComponent(typeof(Outline))]
+public class ScalableObject : CustomElement{
+	[HideInInspector] public Vector3 initScale;
+
+	[Header("单次缩放比例")] public float scaleRatio = 2;
+	[Header("最大缩放比例")] public float maxScaleRatio = 2f;
+	[Header("最小缩放比例")] public float minScaleRatio = 0.5f;
+
+	[Header("缩放动画时长")] public float aniDuration = 0.5f;
+
+	[HideInInspector] public float currScale;
+
+	[HideInInspector] public Outline outline; //这是QuickOutline插件，显示描边用的
+
+	public void Start(){
+		outline = GetComponent<Outline>();
+		outline.OutlineColor = Color.white;
+		outline.enabled = false;
+		initScale = transform.localScale;
+		currScale = 1;
+		Stage.instance.showOutline.AddListener(ShowOutline);
+		Stage.instance.resetStage.AddListener(ResetScale);
+	}
+
+	public void ResetScale(){
+		StopAllCoroutines();
+		transform.localScale = initScale;
+	}
+
+	public void OnMouseOver(){
+		if (currScale < maxScaleRatio && Input.GetKeyDown(KeyCode.Mouse0)){
+			if (Stage.instance.scalingOperationLeft > 0){
+				currScale *= scaleRatio;
+				Stage.instance.scalingOperationLeft--;
+				UpdateScale();
+			}
+		}
+		else if (currScale > minScaleRatio && Input.GetKeyDown(KeyCode.Mouse1)){
+			if (Stage.instance.scalingOperationLeft > 0){
+				currScale /= scaleRatio;
+				Stage.instance.scalingOperationLeft--;
+				UpdateScale();
+			}
+		}
+	}
+
+	public void OnMouseEnter(){
+		outline.enabled = true;
+	}
+
+	public void OnMouseExit(){
+		outline.enabled = false;
+	}
+
+	public void ShowOutline(){
+		outline.enabled = true;
+		Tools.CallDelayed(() => { outline.enabled = false; }, 1);
+	}
+
+	public void UpdateScale(){
+		var s = initScale * currScale;
+		s.z = initScale.z;
+		SetScaleAni(s, aniDuration, scaled: false);
+	}
+}
