@@ -23,12 +23,12 @@ public class Stage : MonoBehaviour{
 		platformLayer = 1 << LayerMask.NameToLayer("Platform");
 	}
 
-	public void Update(){
-		var h = Input.GetAxis("Horizontal");
-		var v = Input.GetAxis("Vertical");
-		if (h + v != 0){
-			currLight.transform.position += new Vector3(h, v, 0);
-			updateShadow.Invoke();
-		}
-	}
+	// public void Update(){
+	// 	var h = Input.GetAxis("Horizontal");
+	// 	var v = Input.GetAxis("Vertical");
+	// 	if (h + v != 0){
+	// 		currLight.transform.position += new Vector3(h, v, 0);
+	// 		updateShadow.Invoke();
+	// 	}
+	// }
 }
