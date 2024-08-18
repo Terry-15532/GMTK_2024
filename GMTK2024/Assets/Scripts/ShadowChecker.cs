@@ -4,7 +4,9 @@ using UnityEditor.PackageManager;
 
 
 public class ShadowChecker : MonoBehaviour{
-	public Transform[] top, right, bottom, left;
+	public Transform[] top, right, bottom, left; //监测点
+
+	public float maxDist = 0.5f; //最大Dist(监测点与影子边缘的距离)，防止出现底部监测点在角色水平移动时进到影子里导致瞬移的情况
 
 	// public bool HitTop(out float dist){
 	// 	foreach (var t in top){
@@ -51,19 +53,18 @@ public class ShadowChecker : MonoBehaviour{
 	//
 	// 	return false;
 	// }
-	public bool HitTop(out float dist){
+	public bool HitTop(out float dist){ //out的Dist用于在Character里面设置位置，防止出现抖动
 		foreach (var t in top){
 			if (HitsShadow(t.position)){
-				if (HitsShadow(new Vector3(t.position.x, t.position.y - 0.1f, t.position.z))){
+				if (HitsShadow(new Vector3(t.position.x, t.position.y - maxDist, t.position.z))){
 					dist = 0;
 					return true;
 				}
 
 				float low = t.position.y;
-				float high = t.position.y - 0.1f;
-				float mid = low;
+				float high = t.position.y - maxDist;
 				while (Mathf.Abs(high - low) > Time.deltaTime / 10){
-					mid = (low + high) / 2;
+					float mid = (low + high) / 2;
 					var pos = t.position;
 					pos.y = mid;
 					if (HitsShadow(pos)){
@@ -86,16 +87,15 @@ public class ShadowChecker : MonoBehaviour{
 	public bool HitRight(out float dist){
 		foreach (var t in right){
 			if (HitsShadow(t.position)){
-				if (HitsShadow(new Vector3(t.position.x - 0.1f, t.position.y, t.position.z))){
+				if (HitsShadow(new Vector3(t.position.x - maxDist, t.position.y, t.position.z))){
 					dist = 0;
 					return true;
 				}
 
 				float low = t.position.x;
-				float high = t.position.x - 0.1f;
-				float mid = low;
+				float high = t.position.x - maxDist;
 				while (Mathf.Abs(high - low) > Time.deltaTime / 10){
-					mid = (low + high) / 2;
+					float mid = (low + high) / 2;
 					var pos = t.position;
 					pos.x = mid;
 					if (HitsShadow(pos)){
@@ -118,16 +118,15 @@ public class ShadowChecker : MonoBehaviour{
 	public bool HitBottom(out float dist){
 		foreach (var t in bottom){
 			if (HitsShadow(t.position)){
-				if (HitsShadow(new Vector3(t.position.x, t.position.y + 0.1f, t.position.z))){
+				if (HitsShadow(new Vector3(t.position.x, t.position.y + maxDist, t.position.z))){
 					dist = 0;
 					return true;
 				}
 
 				float low = t.position.y;
-				float high = t.position.y + 0.1f;
-				float mid = high;
+				float high = t.position.y + maxDist;
 				while (Mathf.Abs(high - low) > Time.deltaTime / 10){
-					mid = (low + high) / 2;
+					float mid = (low + high) / 2;
 					var pos = t.position;
 					pos.y = mid;
 					if (HitsShadow(pos)){
@@ -150,16 +149,15 @@ public class ShadowChecker : MonoBehaviour{
 	public bool HitLeft(out float dist){
 		foreach (var t in left){
 			if (HitsShadow(t.position)){
-				if (HitsShadow(new Vector3(t.position.x + 0.1f, t.position.y, t.position.z))){
+				if (HitsShadow(new Vector3(t.position.x + maxDist, t.position.y, t.position.z))){
 					dist = 0;
 					return true;
 				}
 
 				float low = t.position.x;
-				float high = t.position.x + 0.1f;
-				float mid = high;
+				float high = t.position.x + maxDist;
 				while (Mathf.Abs(high - low) > Time.deltaTime / 10){
-					mid = (low + high) / 2;
+					float mid = (low + high) / 2;
 					var pos = t.position;
 					pos.x = mid;
 					if (HitsShadow(pos)){

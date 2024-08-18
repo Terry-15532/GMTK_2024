@@ -25,19 +25,17 @@ public class Character : MonoBehaviour{
 	}
 
 	public void FixedUpdate(){
-		var v = rb.linearVelocity;
 		var top = checker.HitTop(out float topDist);
 		var bottom = checker.HitBottom(out float bottomDist);
 		var left = checker.HitLeft(out float leftDist);
 		var right = checker.HitRight(out float rightDist);
 
 
-		var finalV = new Vector3(Input.GetAxis("Horizontal") * speed, v.y, 0);
+		var finalV = new Vector3(Input.GetAxis("Horizontal") * speed, rb.linearVelocity.y, 0);
 
-		finalV.y += -9.8f * Time.fixedDeltaTime;
+		finalV.y += -9.8f * Time.fixedDeltaTime; //改为手动设置重力，否则即使设置速度y分量为零仍然会向下动
 
 		if (canJump && jumpKeyDown){
-			Debug.Log("AAA");
 			finalV.y = 5;
 			canJump = false;
 		}
@@ -55,17 +53,16 @@ public class Character : MonoBehaviour{
 
 		if (left && finalV.x < 0){
 			canJump = true;
-			finalV = new Vector3(0, finalV.y > 0 ? finalV.y : -1, 0);
+			finalV.x = 0;
 			transform.position += new Vector3(leftDist, 0, 0);
 		}
 
 		if (right && finalV.x > 0){
 			canJump = true;
-			finalV = new Vector3(0, finalV.y >= 0 ? finalV.y : -1, 0);
+			finalV.x = 0;
 			transform.position -= new Vector3(rightDist, 0, 0);
 		}
 
 		rb.linearVelocity = finalV;
-		Debug.Log(finalV + bottom.ToString());
 	}
 }
