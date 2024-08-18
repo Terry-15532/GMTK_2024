@@ -11,26 +11,42 @@ public class Character : MonoBehaviour{
 	public static Character instance;
 	public bool jumpKeyDown;
 
-	public bool grounded, shadowGrounded;
+	public bool grounded, canJump;
+	public Vector3 initPos;
 
 	public SpriteRenderer sr;
 
 	public Animator animator;
+
 	public static readonly int falling = Animator.StringToHash("Falling");
+
 	private static readonly int running = Animator.StringToHash("Running");
+
 	// private static readonly int jump = Animator.StringToHash("Jump");
 	private static readonly int jumping = Animator.StringToHash("Jumping");
 
+	public void Reset(){
+		transform.position = initPos;
+		rb.linearVelocity = Vector3.zero;
+	}
+	
 	public void Awake(){
 		instance = this;
+		initPos = transform.position;
 		rb = GetComponent<Rigidbody>();
 		checker = GetComponent<ShadowChecker>();
 		animator = GetComponent<Animator>();
 		sr = GetComponent<SpriteRenderer>();
 	}
+	
+
+	public void Start(){
+		Stage.instance.resetStage.AddListener(Reset);
+	}
 
 	public void OnCollisionStay(Collision other){
 		if (other.contacts.Any(contact => contact.point.y < transform.position.y - 0.35f)){
+			canJump = true;
 			grounded = true;
 		}
 	}
@@ -54,16 +70,20 @@ public class Character : MonoBehaviour{
 
 		finalV.y += -9.8f * Time.fixedDeltaTime; //改为手动设置重力，否则即使设置速度y分量为零仍然会向下动
 
-		if ((grounded || bottom) && jumpKeyDown){
+		if (canJump && jumpKeyDown){
 			finalV.y = 5;
+			canJump = false;
 			StopAllCoroutines();
 			animator.SetBool(jumping, true);
 			Tools.CallDelayed(() => { animator.SetBool(jumping, false); }, 0.25f);
 		}
 
-		if (bottom && finalV.y <= 0){
-			finalV.y = top ? 3 : 0;
-			transform.position += new Vector3(0, bottomDist, 0);
+		if (bottom){
+			canJump = true;
+			if (finalV.y <= 0){
+				finalV.y = top ? 3 : 0;
+				transform.position += new Vector3(0, bottomDist, 0);
+			}
 		}
 
 		else if (top && finalV.y > 0){

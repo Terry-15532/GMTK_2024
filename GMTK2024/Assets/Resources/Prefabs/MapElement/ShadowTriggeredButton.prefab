@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4701911484063266672}
   - component: {fileID: 3471067338962653641}
   m_Layer: 0
-  m_Name: Button
+  m_Name: ShadowTriggeredButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
