@@ -37,6 +37,7 @@ public class Character : MonoBehaviour{
 		checker = GetComponent<ShadowChecker>();
 		animator = GetComponent<Animator>();
 		sr = GetComponent<SpriteRenderer>();
+		canJump = true;
 	}
 	
 

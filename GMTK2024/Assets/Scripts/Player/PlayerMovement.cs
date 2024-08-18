@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     private bool canMove = true;
     public Animator animator;
     private int jumpPredict = 0;
-    // public Gravity gravity;
+    public Gravity gravity;
     public float jumpGrav;
     public float fallGrav;
     private bool isFlipped = false;
@@ -154,7 +154,7 @@ public class PlayerMovement : MonoBehaviour
         canMove = false;
         // body.isKinematic = true;
         body.freezeRotation = false;
-        // gravity.setIsEnabled(false);
+        gravity.setIsEnabled(false);
         GetComponent<SphereCollider>().enabled = false;
         transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y - 0.1f, obj.transform.position.z);
         transform.localScale = new Vector3(1, 0.125f, 1);
@@ -167,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
         transform.SetParent(null);
         canMove = true;
         // body.isKinematic = false;
-        // gravity.setIsEnabled(true);
+        gravity.setIsEnabled(true);
         GetComponent<SphereCollider>().enabled = true;
         transform.localScale = new Vector3(1, 1, 1);
         transform.rotation = Quaternion.identity;
