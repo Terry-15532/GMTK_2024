@@ -11,7 +11,7 @@ public class Character : MonoBehaviour{
 	public static Character instance;
 	public bool jumpKeyDown;
 
-	public bool grounded, canJump;
+	public bool grounded, canJump = true;
 	public Vector3 initPos;
 
 	public SpriteRenderer sr;
