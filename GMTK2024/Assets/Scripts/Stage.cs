@@ -27,15 +27,20 @@ public class Stage : MonoBehaviour{
 		scalingOperationLeft = maxScalingOperation;
 	}
 
-	// public void Reset(){
-	// 	resetStage.Invoke();
-	// }
+    private void Start()
+    {
+        showOutline.Invoke();
+    }
 
-	// public void ShowOutline(){
-	// 	showOutline.Invoke();
-	// }
+    // public void Reset(){
+    // 	resetStage.Invoke();
+    // }
 
-	public void Update(){
+    // public void ShowOutline(){
+    // 	showOutline.Invoke();
+    // }
+
+    public void Update(){
 		if (Input.GetKeyDown(KeyCode.O)){
 			showOutline.Invoke();
 		}

@@ -4,15 +4,15 @@ public class ShadowTrigger : MonoBehaviour{
 	public Transform startPoint; // The point from which to cast the rays
 	public float maxRayDistance = 100f; // Maximum distance for raycasts
 
-	public void Check(){
+	public void Update(){
 		if (CheckRaycasts()){
 			TriggerFunction();
 		}
 	}
 
 	private bool CheckRaycasts(){
-		Collider c = GetComponent<Collider>();
-		MeshCollider meshCollider = c as MeshCollider;
+        //Debug.Log("Checking rays");
+        MeshCollider meshCollider = GetComponent<MeshCollider>();
 
 		if (meshCollider != null){
 			Mesh mesh = meshCollider.sharedMesh;
@@ -24,13 +24,14 @@ public class ShadowTrigger : MonoBehaviour{
 			foreach (Vector3 vertex in vertices){
 				Vector3 worldVertex = colliderTransform.TransformPoint(vertex);
 				Ray ray = new Ray(startPoint.position, worldVertex - startPoint.position);
-				RaycastHit[] hits;
+				// RaycastHit[] hits;
 
 
 				bool hitPlatform = Physics.Raycast(ray, maxRayDistance, Stage.platformLayer);
 
 				if (!hitPlatform){
 					allRaysHitPlatform = false;
+					//Debug.Log("Ray didn't hit platform");
 					break;
 				}
 			}
@@ -42,6 +43,6 @@ public class ShadowTrigger : MonoBehaviour{
 	}
 
 	private void TriggerFunction(){
-		Debug.Log("Button Triggered");
+		//Debug.Log("Button Triggered");
 	}
 }
