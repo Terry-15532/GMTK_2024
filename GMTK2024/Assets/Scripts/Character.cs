@@ -16,12 +16,12 @@ public class Character : MonoBehaviour{
 		checker = GetComponent<ShadowChecker>();
 	}
 
-	public void OnCollisionStay(Collision other){
+	public void OnCollisionStay(Collision other) {
 		canJump = true;
 	}
 
 	public void Update(){
-		jumpKeyDown = (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0));
+		jumpKeyDown = (Input.GetKeyDown(KeyCode.Space));
 	}
 
 	public void FixedUpdate(){
