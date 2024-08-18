@@ -12,7 +12,14 @@ public class Stage : MonoBehaviour{
 
 	public int index;
 
-	public int maxScalingOperation, scalingOperationLeft;
+	[Header("最大缩放次数")]
+	public int maxScalingOperation;
+	
+	[HideInInspector]
+	public int scalingOperationLeft;
+
+	[Header("平台所在面的Z坐标，用于计算角色阴影模式")]
+	public float platformZ;
 
 	public static Stage instance;
 	[FormerlySerializedAs("updateShadow")] public UnityEvent updateShadowTrigger = new();

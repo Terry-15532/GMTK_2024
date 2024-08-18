@@ -6,6 +6,14 @@ public class CameraTrigger : MonoBehaviour{
 	//CinemachineBrain brain;
 	public CinemachineCamera cam;
 
+	public void Reset(){
+		cam.enabled = false;
+	}
+
+	public void Start(){
+		Stage.instance.resetStage.AddListener(Reset);
+	}
+
 	private void OnTriggerEnter(Collider other){
 		cam.enabled = true;
 	}
