@@ -37,7 +37,7 @@ public class ScalableObject : CustomElement{
 	public void Update(){
 		if (mouseOver){
 			if (currScale < maxScaleRatio && Input.GetKeyDown(KeyCode.Mouse0)){
-				Debug.Log("Larger");
+				// Debug.Log("Larger");
 				if (Stage.instance.scalingOperationLeft > 0){
 					currScale *= scaleRatio;
 					Stage.instance.scalingOperationLeft--;
@@ -45,7 +45,7 @@ public class ScalableObject : CustomElement{
 				}
 			}
 			else if (currScale > minScaleRatio && Input.GetKeyDown(KeyCode.Mouse1)){
-				Debug.Log("Smaller");
+				// Debug.Log("Smaller");
 				if (Stage.instance.scalingOperationLeft > 0){
 					currScale /= scaleRatio;
 					Stage.instance.scalingOperationLeft--;
