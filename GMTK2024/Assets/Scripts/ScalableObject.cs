@@ -12,7 +12,7 @@ public class ScalableObject : CustomElement{
 
 	[Header("缩放动画时长")] public float aniDuration = 0.5f;
 
-	[HideInInspector] public float currScale;
+	[Header("初始大小")] public float currScale;
 
 	[HideInInspector] public Outline outline; //这是QuickOutline插件，显示描边用的
 	[HideInInspector] public bool mouseOver = false;
