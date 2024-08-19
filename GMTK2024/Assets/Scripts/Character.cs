@@ -9,6 +9,7 @@ public class Character : MonoBehaviour{
 	public Rigidbody rb;
 	public ShadowChecker checker;
 	public float speed = 5;
+	public float jumpforce = 5;
 	public static Character instance;
 	public bool jumpKeyDown;
 
@@ -104,7 +105,7 @@ public class Character : MonoBehaviour{
 		finalV.y += -9.8f * Time.fixedDeltaTime; //改为手动设置重力，否则即使设置速度y分量为零仍然会向下动
 
 		if (canJump && jumpKeyDown){
-			finalV.y = 5;
+			finalV.y = jumpforce;
 			canJump = false;
 			StopAllCoroutines();
 			animator.SetBool(jumping, true);
