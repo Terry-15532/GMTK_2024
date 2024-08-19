@@ -15,8 +15,9 @@ public class Character : MonoBehaviour{
 
 	public MeshRenderer model;
 
-    public bool grounded, canJump = true;
-    public bool canMoveLight = true;
+	public bool wallGrounded;
+	public bool shadowGrounded;
+	public bool canMoveLight = true;
 
 	public bool shadowMode;
 
@@ -31,7 +32,7 @@ public class Character : MonoBehaviour{
 	private static readonly int running = Animator.StringToHash("Running");
 
 	private static readonly int jumping = Animator.StringToHash("Jumping");
-    private int collisionCount;
+	private int collisionCount;
 
 	public void Reset(){
 		transform.position = initPos;
@@ -45,7 +46,6 @@ public class Character : MonoBehaviour{
 		checker = GetComponent<ShadowChecker>();
 		animator = GetComponent<Animator>();
 		// sr = GetComponent<SpriteRenderer>();
-		canJump = true;
 		model = GetComponentInChildren<MeshRenderer>();
 		initScale = model.transform.localScale;
 	}
@@ -56,40 +56,63 @@ public class Character : MonoBehaviour{
 	}
 
 	public void OnCollisionEnter(Collision other){
-        collisionCount++;
+		collisionCount++;
+		shadowMode = false;
 		if (other.contacts.Any(contact => contact.point.y < transform.position.y - 0.55f)){
-            // Debug.Log("collision enter ground");
-			canJump = true;
-			grounded = true;
-			shadowMode = false;
-            canMoveLight = true;
-			var lamp = Stage.instance.currLight.GetComponent<MovableLamp>();
-            if (lamp!= null && lamp.mouseOn) {
-                Stage.instance.currLight.GetComponent<MovableLamp>().outline.enabled = true;
-            }
+			// Debug.Log("collision enter ground");
+			StopAllCoroutines();
+			wallGrounded = true;
+			canMoveLight = true;
+			foreach (var l in Stage.instance.currLights){
+				var lamp = l.GetComponent<MovableLamp>();
+				if (lamp != null && lamp.mouseOn){
+					lamp.outline.enabled = true;
+				}
+			}
 		}
 	}
 
 	public void OnCollisionExit(Collision other){
-        collisionCount--;
-        if (collisionCount <= 0){
-            grounded = false;
-            canMoveLight = false;
-            Stage.instance.currLight.GetComponent<MovableLamp>().isDragging = false;
-            Stage.instance.currLight.GetComponent<MovableLamp>().outline.enabled = false;
-        }
+		collisionCount--;
+		if (collisionCount <= 0){
+			wallGrounded = false;
+			Tools.CallDelayed(() => { wallGrounded = false; }, 0.1f);
+			canMoveLight = false;
+			foreach (var l in Stage.instance.currLights){
+				var lamp = l.GetComponent<MovableLamp>();
+				if (lamp){
+					lamp.isDragging = false;
+					lamp.outline.enabled = false;
+				}
+			}
+		}
 	}
 
 	public void UpdateModel(){
 		if (shadowMode){
 			model.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-			var lightPos = Stage.instance.currLight.position;
 			var cameraPos = GameInfo.mainCamera.transform.position;
 			Ray wallRay = new Ray(transform.position, transform.position - cameraPos);
 			Debug.DrawRay(wallRay.origin, wallRay.direction, Color.cyan);
 			Physics.Raycast(wallRay, out RaycastHit hit, 1000, Stage.wallLayer);
 			var wallPos = hit.point;
+
+			Transform inLight = Stage.instance.currLights[0];
+			foreach (var l in Stage.instance.currLights){
+				Ray r = new Ray(wallPos, l.position - wallPos);
+				if (checker.InLight(r, l)){
+					inLight = l;
+					break;
+				}
+			}
+
+			var lightPos = inLight.position;
 			Ray ray = new Ray(wallPos, lightPos - wallPos);
+
+			if (!checker.InAnyLight(ray)){
+				shadowMode = false;
+			}
+
 			float distance = (Stage.instance.platformZ - ray.origin.z) / ray.direction.z;
 			float lightRatio = (lightPos.z - Stage.instance.platformZ) / (lightPos.z - ray.origin.z);
 			float cameraRatio = (cameraPos.z - ray.origin.z) / (cameraPos.z - Stage.instance.platformZ);
@@ -105,10 +128,13 @@ public class Character : MonoBehaviour{
 	}
 
 	public void Update(){
-        if(Input.GetKeyDown(KeyCode.Space)) {
-		    jumpKeyDown = true;
-        }
+		if (Input.GetKeyDown(KeyCode.Space)){
+			jumpKeyDown = true;
+			jumpKeyPressedTime = Time.unscaledTime;
+		}
 	}
+
+	public float jumpKeyPressedTime;
 
 	public void FixedUpdate(){
 		var top = checker.HitTop(out float topDist);
@@ -121,22 +147,28 @@ public class Character : MonoBehaviour{
 
 		finalV.y += -9.8f * Time.fixedDeltaTime; //改为手动设置重力，否则即使设置速度y分量为零仍然会向下动
 
-        // if(canJump){
-        //     Debug.Log("canjump");
-        // }
+		// if(canJump){
+		//     Debug.Log("canjump");
+		// }
 
-		if (canJump && jumpKeyDown){
+		if ((shadowGrounded || wallGrounded) && jumpKeyDown){
 			finalV.y = jumpSpeed;
 			jumpKeyDown = false;
-			canJump = false;
-            jumpKeyDown = false;
+			shadowGrounded = false;
+			jumpKeyDown = false;
 			StopAllCoroutines();
 			animator.SetBool(jumping, true);
 			Tools.CallDelayed(() => { animator.SetBool(jumping, false); }, 0.25f);
 		}
 
+		if (Time.unscaledTime > jumpKeyPressedTime + 0.1f){
+			jumpKeyDown = false;
+		}
+
 		if (bottom){
-			canJump = true;
+			StopAllCoroutines();
+			shadowGrounded = true;
+			shadowMode = true;
 			if (finalV.y <= 0){
 				finalV.y = top ? 3 : 0;
 				transform.position += new Vector3(0, bottomDist, 0);
@@ -158,9 +190,10 @@ public class Character : MonoBehaviour{
 			transform.position -= new Vector3(rightDist, 0, 0);
 		}
 
-		if (bottom){
-			shadowMode = true;
+		if (!bottom){
+			Tools.CallDelayed(() => { shadowGrounded = false; }, 0.1f);
 		}
+
 		// else{
 		// 	shadowMode = false;
 		// }
@@ -171,7 +204,7 @@ public class Character : MonoBehaviour{
 		// 	sr.flipX = true;
 		// }
 
-		if (bottom || grounded){
+		if (bottom || wallGrounded){
 			animator.SetBool(running, Mathf.Abs(finalV.x) > 0);
 			animator.SetBool(falling, false);
 		}

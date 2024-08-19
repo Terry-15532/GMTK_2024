@@ -54,7 +54,8 @@ public class ShadowChecker : MonoBehaviour{
 	//
 	// 	return false;
 	// }
-	public bool HitTop(out float dist){ //out的Dist用于在Character里面设置位置，防止出现抖动
+	public bool HitTop(out float dist){
+		//out的Dist用于在Character里面设置位置，防止出现抖动
 		foreach (var t in top){
 			if (HitsShadow(t.position)){
 				if (HitsShadow(new Vector3(t.position.x, t.position.y - maxDist, t.position.z))){
@@ -183,30 +184,41 @@ public class ShadowChecker : MonoBehaviour{
 		var cameraPos = GameInfo.mainCamera.transform.position;
 		Ray ray = new Ray(cameraPos, (pos - cameraPos).normalized);
 		// Debug.DrawRay(ray.origin, ray.direction, Color.cyan, 0.01f);
+
+
 		if (Physics.Raycast(ray, out RaycastHit hit, 100, Stage.wallLayer)){
-			ray.direction = Stage.instance.currLight.position - hit.point;
-			ray.origin = hit.point;
-			// Debug.DrawRay(ray.origin, ray.direction, Color.cyan, 0.01f);
-			// Vector3 normal = Vector3.forward;
-			Vector3 normal = Stage.instance.currLight.transform.forward;
-			
-			float angle = Vector3.Angle(-ray.direction, normal);
-			float light_angle = Stage.instance.currLight.GetComponent<Light>().innerSpotAngle / 2;
+			foreach (var l in Stage.instance.currLights){
+				ray.direction = l.position - hit.point;
+				ray.origin = hit.point;
+				// Debug.DrawRay(ray.origin, ray.direction, Color.cyan, 0.01f);
+				// Vector3 normal = Vector3.forward;
+				Vector3 normal = l.transform.forward;
 
-
-
-            // Debug.Log("angle: " + angle + " spotlight angle: " + light_angle + " normal: " + normal);
-            if (Physics.Raycast(ray, 1000, Stage.platformLayer) && Mathf.Abs(angle) + angleBuffer <= light_angle)
-            {
-                
-                return true;
-			}
-			else{
-				return false;
+				float angle = Vector3.Angle(-ray.direction, normal);
+				float light_angle = l.GetComponent<Light>().innerSpotAngle / 2;
+				if ((Physics.Raycast(ray, 1000, Stage.platformLayer) && InLight(ray, l))){
+					return true;
+				}
 			}
 		}
-		else{
-			return false;
+
+		return false;
+	}
+
+	public bool InLight(Ray ray, Transform l){
+		Vector3 normal = l.transform.forward;
+		float angle = Vector3.Angle(-ray.direction, normal);
+		float light_angle = l.GetComponent<Light>().innerSpotAngle / 2;
+		return Mathf.Abs(angle) + angleBuffer <= light_angle;
+	}
+
+	public bool InAnyLight(Ray ray){
+		foreach (var l in Stage.instance.currLights){
+			if (InLight(ray, l)){
+				return true;
+			}
 		}
+
+		return false;
 	}
 }

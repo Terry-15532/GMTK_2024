@@ -8,7 +8,8 @@ public class Stage : MonoBehaviour{
 	public static int wallLayer;
 	public static int platformLayer;
 
-	public Transform currLight;
+	[Header("初始灯光组")]
+	public Transform[] currLights;
 
 	public int index;
 
