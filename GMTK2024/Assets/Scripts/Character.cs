@@ -8,6 +8,7 @@ public class Character : MonoBehaviour{
 	public Rigidbody rb;
 	public ShadowChecker checker;
 	public float speed = 5;
+	public float jumpforce = 5;
 	public static Character instance;
 	public bool jumpKeyDown;
 
@@ -37,6 +38,7 @@ public class Character : MonoBehaviour{
 		checker = GetComponent<ShadowChecker>();
 		animator = GetComponent<Animator>();
 		sr = GetComponent<SpriteRenderer>();
+		canJump = true;
 	}
 	
 
@@ -46,6 +48,7 @@ public class Character : MonoBehaviour{
 
 	public void OnCollisionStay(Collision other){
 		if (other.contacts.Any(contact => contact.point.y < transform.position.y - 0.35f)){
+			Debug.Log("on ground");
 			canJump = true;
 			grounded = true;
 		}
@@ -71,7 +74,7 @@ public class Character : MonoBehaviour{
 		finalV.y += -9.8f * Time.fixedDeltaTime; //改为手动设置重力，否则即使设置速度y分量为零仍然会向下动
 
 		if (canJump && jumpKeyDown){
-			finalV.y = 5;
+			finalV.y = jumpforce;
 			canJump = false;
 			StopAllCoroutines();
 			animator.SetBool(jumping, true);

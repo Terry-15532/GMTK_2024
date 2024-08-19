@@ -182,8 +182,8 @@ public class ShadowChecker : MonoBehaviour{
 	public bool HitsShadow(Vector3 pos){
 		var cameraPos = GameInfo.mainCamera.transform.position;
 		Ray ray = new Ray(cameraPos, (pos - cameraPos).normalized);
-		// Debug.DrawRay(ray.origin, ray.direction, Color.cyan, 0.01f);
-		if (Physics.Raycast(ray, out RaycastHit hit, 100, Stage.wallLayer)){
+		//Debug.DrawRay(ray.origin, ray.direction, Color.cyan, 0.01f);
+		if (Physics.Raycast(ray, out RaycastHit hit, 1000, Stage.wallLayer)){
 			ray.direction = Stage.instance.currLight.position - hit.point;
 			ray.origin = hit.point;
 			// Debug.DrawRay(ray.origin, ray.direction, Color.cyan, 0.01f);
@@ -191,7 +191,7 @@ public class ShadowChecker : MonoBehaviour{
 			float angle = 90f - Vector3.Angle(ray.direction, normal);
 			float light_angle = 90f - (Stage.instance.currLight.GetComponent<Light>().innerSpotAngle / 2);
             //Debug.Log("angle: " + angle + " spotlight angle: " + light_angle);
-            if (Physics.Raycast(ray, 1000, Stage.platformLayer) && Mathf.Abs(angle) + angleBuffer >= light_angle)
+            if (Physics.Raycast(ray, 1000, Stage.platformLayer) && Mathf.Abs(angle) >= light_angle)
             {
                 
                 return true;
