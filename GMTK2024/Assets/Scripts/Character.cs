@@ -32,7 +32,8 @@ public class Character : MonoBehaviour{
 	private static readonly int running = Animator.StringToHash("Running");
 
 	private static readonly int jumping = Animator.StringToHash("Jumping");
-	private int collisionCount;
+	private int collisionCount = 0;
+	public bool movingLight = false;
 
 	public void Reset(){
 		transform.position = initPos;
@@ -137,83 +138,85 @@ public class Character : MonoBehaviour{
 	public float jumpKeyPressedTime;
 
 	public void FixedUpdate(){
-		var top = checker.HitTop(out float topDist);
-		var bottom = checker.HitBottom(out float bottomDist);
-		var left = checker.HitLeft(out float leftDist);
-		var right = checker.HitRight(out float rightDist);
+		if (!movingLight) {
+			var top = checker.HitTop(out float topDist);
+			var bottom = checker.HitBottom(out float bottomDist);
+			var left = checker.HitLeft(out float leftDist);
+			var right = checker.HitRight(out float rightDist);
 
 
-		var finalV = new Vector3(Input.GetAxis("Horizontal") * speed, rb.linearVelocity.y, 0);
+			var finalV = new Vector3(Input.GetAxis("Horizontal") * speed, rb.linearVelocity.y, 0);
 
-		finalV.y += -9.8f * Time.fixedDeltaTime; //改为手动设置重力，否则即使设置速度y分量为零仍然会向下动
+			finalV.y += -9.8f * Time.fixedDeltaTime; //改为手动设置重力，否则即使设置速度y分量为零仍然会向下动
 
-		// if(canJump){
-		//     Debug.Log("canjump");
-		// }
+			// if(canJump){
+			//     Debug.Log("canjump");
+			// }
 
-		if ((shadowGrounded || wallGrounded) && jumpKeyDown){
-			finalV.y = jumpSpeed;
-			jumpKeyDown = false;
-			shadowGrounded = false;
-			jumpKeyDown = false;
-			StopAllCoroutines();
-			animator.SetBool(jumping, true);
-			Tools.CallDelayed(() => { animator.SetBool(jumping, false); }, 0.25f);
-		}
-
-		if (Time.unscaledTime > jumpKeyPressedTime + 0.1f){
-			jumpKeyDown = false;
-		}
-
-		if (bottom){
-			StopAllCoroutines();
-			shadowGrounded = true;
-			shadowMode = true;
-			if (finalV.y <= 0){
-				finalV.y = top ? 3 : 0;
-				transform.position += new Vector3(0, bottomDist, 0);
+			if ((shadowGrounded || wallGrounded) && jumpKeyDown){
+				finalV.y = jumpSpeed;
+				jumpKeyDown = false;
+				shadowGrounded = false;
+				jumpKeyDown = false;
+				StopAllCoroutines();
+				animator.SetBool(jumping, true);
+				Tools.CallDelayed(() => { animator.SetBool(jumping, false); }, 0.25f);
 			}
+
+			if (Time.unscaledTime > jumpKeyPressedTime + 0.1f){
+				jumpKeyDown = false;
+			}
+
+			if (bottom){
+				StopAllCoroutines();
+				shadowGrounded = true;
+				shadowMode = true;
+				if (finalV.y <= 0){
+					finalV.y = top ? 3 : 0;
+					transform.position += new Vector3(0, bottomDist, 0);
+				}
+			}
+
+			else if (top && finalV.y > 0){
+				finalV.y = 0;
+				transform.position -= new Vector3(0, topDist, 0);
+			}
+
+			if (left && finalV.x < 0){
+				finalV.x = 0;
+				transform.position += new Vector3(leftDist, 0, 0);
+			}
+
+			if (right && finalV.x > 0){
+				finalV.x = 0;
+				transform.position -= new Vector3(rightDist, 0, 0);
+			}
+
+			if (!bottom){
+				Tools.CallDelayed(() => { shadowGrounded = false; }, 0.1f);
+			}
+
+			// else{
+			// 	shadowMode = false;
+			// }
+			// if (finalV.x > 0){
+			// 	sr.flipX = false;
+			// }
+			// else if (finalV.x < 0){
+			// 	sr.flipX = true;
+			// }
+
+			if (bottom || wallGrounded){
+				animator.SetBool(running, Mathf.Abs(finalV.x) > 0);
+				animator.SetBool(falling, false);
+			}
+			else{
+				animator.SetBool(falling, true);
+			}
+
+			UpdateModel();
+
+			rb.linearVelocity = finalV;
 		}
-
-		else if (top && finalV.y > 0){
-			finalV.y = 0;
-			transform.position -= new Vector3(0, topDist, 0);
-		}
-
-		if (left && finalV.x < 0){
-			finalV.x = 0;
-			transform.position += new Vector3(leftDist, 0, 0);
-		}
-
-		if (right && finalV.x > 0){
-			finalV.x = 0;
-			transform.position -= new Vector3(rightDist, 0, 0);
-		}
-
-		if (!bottom){
-			Tools.CallDelayed(() => { shadowGrounded = false; }, 0.1f);
-		}
-
-		// else{
-		// 	shadowMode = false;
-		// }
-		// if (finalV.x > 0){
-		// 	sr.flipX = false;
-		// }
-		// else if (finalV.x < 0){
-		// 	sr.flipX = true;
-		// }
-
-		if (bottom || wallGrounded){
-			animator.SetBool(running, Mathf.Abs(finalV.x) > 0);
-			animator.SetBool(falling, false);
-		}
-		else{
-			animator.SetBool(falling, true);
-		}
-
-		UpdateModel();
-
-		rb.linearVelocity = finalV;
 	}
 }
