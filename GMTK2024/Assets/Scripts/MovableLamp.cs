@@ -22,6 +22,7 @@ public class MovableLamp : MonoBehaviour{
 	public void Start(){
 		outline = GetComponent<Outline>();
 		outline.enabled = false;
+		character = Character.instance;
 		initPos = transform.position;
 		Stage.instance.resetStage.AddListener(ResetPos);
 		Stage.instance.showOutline.AddListener(ShowOutline);
