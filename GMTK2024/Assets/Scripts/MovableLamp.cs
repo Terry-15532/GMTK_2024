@@ -11,6 +11,8 @@ public class MovableLamp : MonoBehaviour{
 	[HideInInspector] public bool isDragging;
 
 	[HideInInspector] public Outline outline;
+	public Character character;
+	public bool mouseOn = false;
 
 
 	public void ResetPos(){
@@ -32,7 +34,9 @@ public class MovableLamp : MonoBehaviour{
 	}
 
 	public void OnMouseDown(){
-		isDragging = !isDragging;
+		if (character.canMoveLight) {
+			isDragging = !isDragging;
+		}
 	}
 
 	public void Update(){
@@ -45,10 +49,18 @@ public class MovableLamp : MonoBehaviour{
 	}
 
 	public void OnMouseEnter(){
-		outline.enabled = true;
+		mouseOn = true;
+		Debug.Log(mouseOn);
+		if (character.canMoveLight) {
+			outline.enabled = true;
+		}
 	}
 
 	public void OnMouseExit(){
+		mouseOn = false;
+		Debug.Log(mouseOn);
 		outline.enabled = false;
 	}
+
+
 }
