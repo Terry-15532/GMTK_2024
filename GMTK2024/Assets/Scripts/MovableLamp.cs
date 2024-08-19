@@ -42,10 +42,13 @@ public class MovableLamp : MonoBehaviour{
 
 	public void Update(){
 		if (isDragging){
+			character.movingLight = true;
 			Ray ray = GameInfo.mainCamera.ScreenPointToRay(Input.mousePosition);
 			var pos = ray.GetPoint((transform.position - GameInfo.mainCamera.transform.position).magnitude);
 			var z = Mathf.Clamp(transform.position.z + Input.GetAxis("Mouse ScrollWheel") * scrollSpeed, minZ, maxZ);
 			transform.position = new Vector3(pos.x, pos.y, z);
+		} else {
+			character.movingLight = false;
 		}
 	}
 

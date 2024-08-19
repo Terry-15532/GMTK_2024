@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using Unity.Cinemachine;
 
 public class Stage : MonoBehaviour{
 	public static int wallLayer;
@@ -57,4 +58,5 @@ public class Stage : MonoBehaviour{
 			resetStage.Invoke();
 		}
 	}
+
 }
