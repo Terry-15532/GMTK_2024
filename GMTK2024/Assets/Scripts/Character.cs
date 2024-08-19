@@ -9,13 +9,13 @@ public class Character : MonoBehaviour{
 	public Rigidbody rb;
 	public ShadowChecker checker;
 	public float speed = 5;
-	public float jumpforce = 5;
 	public static Character instance;
 	public bool jumpKeyDown;
 
 	public MeshRenderer model;
 
-	public bool grounded, canJump = true;
+    public bool grounded, canJump = true;
+    public bool canMoveLight = true;
 
 	public bool shadowMode;
 
@@ -30,6 +30,7 @@ public class Character : MonoBehaviour{
 	private static readonly int running = Animator.StringToHash("Running");
 
 	private static readonly int jumping = Animator.StringToHash("Jumping");
+    private int collisionCount;
 
 	public void Reset(){
 		transform.position = initPos;
@@ -54,15 +55,27 @@ public class Character : MonoBehaviour{
 	}
 
 	public void OnCollisionEnter(Collision other){
-		if (other.contacts.Any(contact => contact.point.y < transform.position.y - 0.35f)){
+        collisionCount++;
+		if (other.contacts.Any(contact => contact.point.y < transform.position.y - 0.55f)){
+            // Debug.Log("collision enter ground");
 			canJump = true;
 			grounded = true;
 			shadowMode = false;
+            canMoveLight = true;
+            if (Stage.instance.currLight.GetComponent<MovableLamp>().mouseOn) {
+                Stage.instance.currLight.GetComponent<MovableLamp>().outline.enabled = true;
+            }
 		}
 	}
 
 	public void OnCollisionExit(Collision other){
-		grounded = false;
+        collisionCount--;
+        if (collisionCount <= 0){
+            grounded = false;
+            canMoveLight = false;
+            Stage.instance.currLight.GetComponent<MovableLamp>().isDragging = false;
+            Stage.instance.currLight.GetComponent<MovableLamp>().outline.enabled = false;
+        }
 	}
 
 	public void UpdateModel(){
@@ -90,7 +103,9 @@ public class Character : MonoBehaviour{
 	}
 
 	public void Update(){
-		jumpKeyDown = Input.GetKeyDown(KeyCode.Space);
+        if(Input.GetKeyDown(KeyCode.Space)) {
+		    jumpKeyDown = true;
+        }
 	}
 
 	public void FixedUpdate(){
@@ -104,9 +119,15 @@ public class Character : MonoBehaviour{
 
 		finalV.y += -9.8f * Time.fixedDeltaTime; //改为手动设置重力，否则即使设置速度y分量为零仍然会向下动
 
+        // if(canJump){
+        //     Debug.Log("canjump");
+        // }
+
 		if (canJump && jumpKeyDown){
-			finalV.y = jumpforce;
+			finalV.y = 5;
+			jumpKeyDown = false;
 			canJump = false;
+            jumpKeyDown = false;
 			StopAllCoroutines();
 			animator.SetBool(jumping, true);
 			Tools.CallDelayed(() => { animator.SetBool(jumping, false); }, 0.25f);
