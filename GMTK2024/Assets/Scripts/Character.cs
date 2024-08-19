@@ -56,6 +56,7 @@ public class Character : MonoBehaviour{
 		if (other.contacts.Any(contact => contact.point.y < transform.position.y - 0.35f)){
 			canJump = true;
 			grounded = true;
+			shadowMode = false;
 		}
 	}
 
@@ -133,13 +134,9 @@ public class Character : MonoBehaviour{
 			transform.position -= new Vector3(rightDist, 0, 0);
 		}
 
-		if (top || bottom || left || right){
+		if (bottom){
 			shadowMode = true;
 		}
-		else{
-			shadowMode = false;
-		}
-
 		// if (finalV.x > 0){
 		// 	sr.flipX = false;
 		// }

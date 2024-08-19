@@ -195,7 +195,7 @@ public class ShadowChecker : MonoBehaviour{
 
 
 
-            Debug.Log("angle: " + angle + " spotlight angle: " + light_angle + " normal: " + normal);
+            // Debug.Log("angle: " + angle + " spotlight angle: " + light_angle + " normal: " + normal);
             if (Physics.Raycast(ray, 1000, Stage.platformLayer) && Mathf.Abs(angle) + angleBuffer <= light_angle)
             {
                 
