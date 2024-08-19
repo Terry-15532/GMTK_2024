@@ -9,6 +9,7 @@ public class Character : MonoBehaviour{
 	public Rigidbody rb;
 	public ShadowChecker checker;
 	public float speed = 5;
+	public float jumpSpeed = 5;
 	public static Character instance;
 	public bool jumpKeyDown;
 
@@ -62,7 +63,8 @@ public class Character : MonoBehaviour{
 			grounded = true;
 			shadowMode = false;
             canMoveLight = true;
-            if (Stage.instance.currLight.GetComponent<MovableLamp>().mouseOn) {
+			var lamp = Stage.instance.currLight.GetComponent<MovableLamp>();
+            if (lamp!= null && lamp.mouseOn) {
                 Stage.instance.currLight.GetComponent<MovableLamp>().outline.enabled = true;
             }
 		}
@@ -124,7 +126,7 @@ public class Character : MonoBehaviour{
         // }
 
 		if (canJump && jumpKeyDown){
-			finalV.y = 5;
+			finalV.y = jumpSpeed;
 			jumpKeyDown = false;
 			canJump = false;
             jumpKeyDown = false;
