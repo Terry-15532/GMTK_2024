@@ -1,25 +1,26 @@
+using System;
 using Unity.Cinemachine;
 using UnityEngine;
 
-public class CameraTrigger : MonoBehaviour
-{
-    //CinemachineBrain brain;
-    public CinemachineCamera cam;
+public class CameraTrigger : MonoBehaviour{
+	//CinemachineBrain brain;
+	public CinemachineCamera cam;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        cam.Priority = 2;
-    }
+	public void Reset(){
+		cam.enabled = false;
+	}
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+	public void Start(){
+		Stage.instance.resetStage.AddListener(Reset);
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	private void OnTriggerEnter(Collider other){
+		cam.enabled = true;
+	}
+
+	public void OnTriggerExit(Collider other){
+		if (other.transform.position.x < transform.position.x){
+			cam.enabled = false;
+		}
+	}
 }

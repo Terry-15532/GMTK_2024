@@ -15,11 +15,13 @@ public class ScalableObject : CustomElement{
 	[HideInInspector] public float currScale;
 
 	[HideInInspector] public Outline outline; //这是QuickOutline插件，显示描边用的
+	[HideInInspector] public bool mouseOver = false;
 
 	public void Start(){
 		outline = GetComponent<Outline>();
 		outline.OutlineColor = Color.white;
 		outline.enabled = false;
+		mouseOver = false;
 		initScale = transform.localScale;
 		currScale = 1;
 		Stage.instance.showOutline.AddListener(ShowOutline);
@@ -28,32 +30,39 @@ public class ScalableObject : CustomElement{
 
 	public void ResetScale(){
 		StopAllCoroutines();
+		currScale = 1;
 		transform.localScale = initScale;
 	}
 
-	public void OnMouseOver(){
-		if (currScale < maxScaleRatio && Input.GetKeyDown(KeyCode.Mouse0)){
-			if (Stage.instance.scalingOperationLeft > 0){
-				currScale *= scaleRatio;
-				Stage.instance.scalingOperationLeft--;
-				UpdateScale();
+	public void Update(){
+		if (mouseOver){
+			if (currScale < maxScaleRatio && Input.GetKeyDown(KeyCode.Mouse0)){
+				// Debug.Log("Larger");
+				if (Stage.instance.scalingOperationLeft > 0){
+					currScale *= scaleRatio;
+					Stage.instance.scalingOperationLeft--;
+					UpdateScale();
+				}
 			}
-		}
-		else if (currScale > minScaleRatio && Input.GetKeyDown(KeyCode.Mouse1)){
-			if (Stage.instance.scalingOperationLeft > 0){
-				currScale /= scaleRatio;
-				Stage.instance.scalingOperationLeft--;
-				UpdateScale();
+			else if (currScale > minScaleRatio && Input.GetKeyDown(KeyCode.Mouse1)){
+				// Debug.Log("Smaller");
+				if (Stage.instance.scalingOperationLeft > 0){
+					currScale /= scaleRatio;
+					Stage.instance.scalingOperationLeft--;
+					UpdateScale();
+				}
 			}
 		}
 	}
 
 	public void OnMouseEnter(){
 		outline.enabled = true;
+		mouseOver = true;
 	}
 
 	public void OnMouseExit(){
 		outline.enabled = false;
+		mouseOver = false;
 	}
 
 	public void ShowOutline(){
