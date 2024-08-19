@@ -13,7 +13,7 @@ public class Character : MonoBehaviour{
 	public static Character instance;
 	public bool jumpKeyDown;
 
-	public MeshRenderer model;
+	public GameObject model;
 
 	public bool wallGrounded;
 	public bool shadowGrounded;
@@ -23,7 +23,7 @@ public class Character : MonoBehaviour{
 
 	public Vector3 initPos, initScale;
 
-	public SpriteRenderer sr;
+	// public SpriteRenderer sr;
 
 	public Animator animator;
 
@@ -45,9 +45,8 @@ public class Character : MonoBehaviour{
 		initPos = transform.position;
 		rb = GetComponent<Rigidbody>();
 		checker = GetComponent<ShadowChecker>();
-		animator = GetComponent<Animator>();
+		animator = GetComponentInChildren<Animator>();
 		// sr = GetComponent<SpriteRenderer>();
-		model = GetComponentInChildren<MeshRenderer>();
 		initScale = model.transform.localScale;
 	}
 
@@ -91,7 +90,7 @@ public class Character : MonoBehaviour{
 
 	public void UpdateModel(){
 		if (shadowMode){
-			model.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+			model.GetComponentInChildren<SkinnedMeshRenderer>().shadowCastingMode = ShadowCastingMode.ShadowsOnly;
 			var cameraPos = GameInfo.mainCamera.transform.position;
 			Ray wallRay = new Ray(transform.position, transform.position - cameraPos);
 			Debug.DrawRay(wallRay.origin, wallRay.direction, Color.cyan);
@@ -122,7 +121,7 @@ public class Character : MonoBehaviour{
 			model.transform.localScale = initScale * (lightRatio * cameraRatio);
 		}
 		else{
-			model.shadowCastingMode = ShadowCastingMode.Off;
+			model.GetComponentInChildren<SkinnedMeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
 			model.transform.localPosition = Vector3.zero;
 			model.transform.localScale = initScale;
 		}
@@ -138,7 +137,7 @@ public class Character : MonoBehaviour{
 	public float jumpKeyPressedTime;
 
 	public void FixedUpdate(){
-		if (!movingLight) {
+		if (!movingLight){
 			var top = checker.HitTop(out float topDist);
 			var bottom = checker.HitBottom(out float bottomDist);
 			var left = checker.HitLeft(out float leftDist);
@@ -199,12 +198,12 @@ public class Character : MonoBehaviour{
 			// else{
 			// 	shadowMode = false;
 			// }
-			// if (finalV.x > 0){
-			// 	sr.flipX = false;
-			// }
-			// else if (finalV.x < 0){
-			// 	sr.flipX = true;
-			// }
+			if (finalV.x > 0){
+				model.transform.eulerAngles = new Vector3(0, 90, 0);
+			}
+			else if (finalV.x < 0){
+				model.transform.eulerAngles = new Vector3(0, -90, 0);
+			}
 
 			if (bottom || wallGrounded){
 				animator.SetBool(running, Mathf.Abs(finalV.x) > 0);
