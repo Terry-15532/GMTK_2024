@@ -40,14 +40,15 @@ public class Character : MonoBehaviour
 
     public void Reset()
     {
+        StopAllCoroutines();
         transform.position = initPos;
         rb.linearVelocity = Vector3.zero;
 		rb.useGravity = false;
 		gameObject.layer = LayerMask.NameToLayer("Default");
 		canMove = true;
-		gameObject.transform.rotation = Quaternion.identity;
-		rb.freezeRotation = true;
+        rb.freezeRotation = true;
 		GetComponentInParent<Collider>().enabled = true;
+        gameObject.transform.rotation = Quaternion.identity;
     }
 
     public void Awake()
@@ -79,7 +80,6 @@ public class Character : MonoBehaviour
             canMoveLight = true;
             if (inLight)
             {
-
                 var lamp = inLight.GetComponent<MovableLamp>();
                 if (lamp != null && lamp.mouseOn)
                 {

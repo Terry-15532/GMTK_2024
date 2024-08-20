@@ -17,8 +17,11 @@ public class DeathBox : MonoBehaviour
     void OnTriggerEnter(Collider collider)
     {
         if (!triggered) {
+            // Debug.Log("triggered");
             triggered = true;
+            StopAllCoroutines();
             Character.instance.canMove = false;
+            Character.instance.rb.linearVelocity = Vector3.zero;
             Character.instance.GetComponentInParent<Collider>().enabled = false;
             Character.instance.rb.freezeRotation = false;
             Character.instance.rb.angularVelocity = Random.onUnitSphere * 10;
