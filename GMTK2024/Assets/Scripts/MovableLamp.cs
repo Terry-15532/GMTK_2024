@@ -54,7 +54,6 @@ public class MovableLamp : MonoBehaviour{
 
 	public void OnMouseEnter(){
 		mouseOn = true;
-		Debug.Log(mouseOn);
 		if (character.canMoveLight) {
 			outline.enabled = true;
 		}
@@ -62,7 +61,6 @@ public class MovableLamp : MonoBehaviour{
 
 	public void OnMouseExit(){
 		mouseOn = false;
-		Debug.Log(mouseOn);
 		outline.enabled = false;
 	}
 

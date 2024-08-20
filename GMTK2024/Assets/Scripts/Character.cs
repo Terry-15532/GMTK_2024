@@ -56,7 +56,7 @@ public class Character : MonoBehaviour{
 	}
 
 	public void OnCollisionEnter(Collision other){
-		collisionCount++;
+		// collisionCount++;
 		shadowMode = false;
 		if (other.contacts.Any(contact => contact.point.y < transform.position.y - 0.55f)){
 			// Debug.Log("collision enter ground");
@@ -73,18 +73,17 @@ public class Character : MonoBehaviour{
 	}
 
 	public void OnCollisionExit(Collision other){
-		collisionCount--;
-		if (collisionCount <= 0){
-			wallGrounded = false;
-			Tools.CallDelayed(() => { wallGrounded = false; }, 0.1f);
-			canMoveLight = false;
-			foreach (var l in Stage.instance.currLights){
-				var lamp = l.GetComponent<MovableLamp>();
-				if (lamp){
-					lamp.isDragging = false;
-					lamp.outline.enabled = false;
-				}
+		// collisionCount--;
+		// if (collisionCount <= 0){
+		Tools.CallDelayed(() => { wallGrounded = false; }, 0.3f);
+		canMoveLight = false;
+		foreach (var l in Stage.instance.currLights){
+			var lamp = l.GetComponent<MovableLamp>();
+			if (lamp){
+				lamp.isDragging = false;
+				lamp.outline.enabled = false;
 			}
+			// }
 		}
 	}
 
@@ -98,10 +97,13 @@ public class Character : MonoBehaviour{
 			var wallPos = hit.point;
 
 			Transform inLight = Stage.instance.currLights[0];
+
+			shadowMode = false;
 			foreach (var l in Stage.instance.currLights){
 				Ray r = new Ray(wallPos, l.position - wallPos);
 				if (checker.InLight(r, l)){
 					inLight = l;
+					shadowMode = true;
 					break;
 				}
 			}
@@ -109,9 +111,9 @@ public class Character : MonoBehaviour{
 			var lightPos = inLight.position;
 			Ray ray = new Ray(wallPos, lightPos - wallPos);
 
-			if (!checker.InAnyLight(ray)){
-				shadowMode = false;
-			}
+			// if (!checker.InAnyLight(ray)){
+			// 	shadowMode = false;
+			// }
 
 			float distance = (Stage.instance.platformZ - ray.origin.z) / ray.direction.z;
 			float lightRatio = (lightPos.z - Stage.instance.platformZ) / (lightPos.z - ray.origin.z);
@@ -156,8 +158,8 @@ public class Character : MonoBehaviour{
 				finalV.y = jumpSpeed;
 				jumpKeyDown = false;
 				shadowGrounded = false;
+				wallGrounded = false;
 				jumpKeyDown = false;
-				StopAllCoroutines();
 				animator.SetBool(jumping, true);
 				Tools.CallDelayed(() => { animator.SetBool(jumping, false); }, 0.25f);
 			}
@@ -192,17 +194,19 @@ public class Character : MonoBehaviour{
 			}
 
 			if (!bottom){
-				Tools.CallDelayed(() => { shadowGrounded = false; }, 0.1f);
+				Tools.CallDelayed(() => { shadowGrounded = false; }, 0.3f);
 			}
 
 			// else{
 			// 	shadowMode = false;
 			// }
 			if (finalV.x > 0){
-				model.transform.eulerAngles = new Vector3(0, 90, 0);
+				// model.transform.eulerAngles = new Vector3(0, 90, 0);
+				model.GetComponent<CustomElement>().SetRotationAni(new Vector3(0, 90, 0), 0.5f);
 			}
 			else if (finalV.x < 0){
-				model.transform.eulerAngles = new Vector3(0, -90, 0);
+				model.GetComponent<CustomElement>().SetRotationAni(new Vector3(0, -90, 0), 0.5f);
+				// model.transform.eulerAngles = new Vector3(0, -90, 0);
 			}
 
 			if (bottom || wallGrounded){
