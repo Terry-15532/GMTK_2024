@@ -15,7 +15,7 @@ public class MusicOrchestrator : MonoBehaviour
     // private static bool autoPlay1;
     // private static bool autoPlay2;
 
-    private static MusicOrchestrator instance;
+    public static MusicOrchestrator instance;
 
     private void Awake()
     {

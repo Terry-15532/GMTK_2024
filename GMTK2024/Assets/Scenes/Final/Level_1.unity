@@ -88516,7 +88516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   newScene: Level_2
-  orchestrator: {fileID: 1037021941}
+  track: 2
 --- !u!65 &2054141768
 BoxCollider:
   m_ObjectHideFlags: 0
