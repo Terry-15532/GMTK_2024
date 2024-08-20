@@ -246,6 +246,15 @@ public static class floatHelper{
 	}
 }
 
+public static class rayHelper
+{
+    public static Vector3 PosAtGivenZ(this Ray ray, float z)
+    {
+        float distance = z / ray.direction.z;
+        return ray.GetPoint(distance);
+    }
+}
+
 //public class WaitForSecondsUnscaled : CustomYieldInstruction {
 //    private float waitTime;
 

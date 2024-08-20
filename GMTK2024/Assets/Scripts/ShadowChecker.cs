@@ -60,9 +60,9 @@ public class ShadowChecker : MonoBehaviour
         //out的Dist用于在Character里面设置位置，防止出现抖动
         foreach (var t in top)
         {
-            if (HitsShadow(t.position, out _))
+            if (HitsShadow(t.position, out Transform light))
             {
-                if (HitsShadow(new Vector3(t.position.x, t.position.y - maxDist, t.position.z), out _))
+                if (HitsShadow(new Vector3(t.position.x, t.position.y - maxDist, t.position.z), out _, light))
                 {
                     dist = 0;
                     return true;
@@ -75,7 +75,7 @@ public class ShadowChecker : MonoBehaviour
                     float mid = (low + high) / 2;
                     var pos = t.position;
                     pos.y = mid;
-                    if (HitsShadow(pos, out _))
+                    if (HitsShadow(pos, out _, light))
                     {
                         low = mid;
                     }
@@ -98,9 +98,9 @@ public class ShadowChecker : MonoBehaviour
     {
         foreach (var t in right)
         {
-            if (HitsShadow(t.position, out _))
+            if (HitsShadow(t.position, out Transform light))
             {
-                if (HitsShadow(new Vector3(t.position.x - maxDist, t.position.y, t.position.z), out _))
+                if (HitsShadow(new Vector3(t.position.x - maxDist, t.position.y, t.position.z), out _, light))
                 {
                     dist = 0;
                     return true;
@@ -136,9 +136,11 @@ public class ShadowChecker : MonoBehaviour
     {
         foreach (var t in bottom)
         {
-            if (HitsShadow(t.position, out _))
+            if (HitsShadow(t.position, out Transform light))
             {
-                if (HitsShadow(new Vector3(t.position.x, t.position.y + maxDist, t.position.z), out _))
+                Character.instance.inLight = light;
+
+                if (HitsShadow(new Vector3(t.position.x, t.position.y + maxDist, t.position.z), out _, light))
                 {
                     dist = 0;
                     return true;
@@ -151,7 +153,7 @@ public class ShadowChecker : MonoBehaviour
                     float mid = (low + high) / 2;
                     var pos = t.position;
                     pos.y = mid;
-                    if (HitsShadow(pos, out _))
+                    if (HitsShadow(pos, out _, light))
                     {
                         low = mid;
                     }
@@ -174,9 +176,9 @@ public class ShadowChecker : MonoBehaviour
     {
         foreach (var t in left)
         {
-            if (HitsShadow(t.position, out _))
+            if (HitsShadow(t.position, out Transform light))
             {
-                if (HitsShadow(new Vector3(t.position.x + maxDist, t.position.y, t.position.z), out _))
+                if (HitsShadow(new Vector3(t.position.x + maxDist, t.position.y, t.position.z), out _, light))
                 {
                     dist = 0;
                     return true;
@@ -189,7 +191,7 @@ public class ShadowChecker : MonoBehaviour
                     float mid = (low + high) / 2;
                     var pos = t.position;
                     pos.x = mid;
-                    if (HitsShadow(pos, out _))
+                    if (HitsShadow(pos, out _, light))
                     {
                         low = mid;
                     }
@@ -209,7 +211,7 @@ public class ShadowChecker : MonoBehaviour
     }
 
 
-    public bool HitsShadow(Vector3 pos, Transform inLight, out Transform light)
+    public bool HitsShadow(Vector3 pos, out Transform light, Transform inLight = null)
     {
         var cameraPos = GameInfo.mainCamera.transform.position;
         Ray ray = new Ray(cameraPos, (pos - cameraPos).normalized);
@@ -218,14 +220,27 @@ public class ShadowChecker : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100, Stage.wallLayer))
         {
-            foreach (var l in Stage.instance.currLights)
+            if (inLight != null)
             {
-                ray.direction = l.position - hit.point;
+                ray.direction = inLight.position - hit.point;
                 ray.origin = hit.point;
-                if (InLight(ray, l) && Physics.Raycast(ray, out hit, 1000, Stage.platformLayer))
+                if (InLight(ray, inLight) && Physics.Raycast(ray, out hit, 1000, Stage.platformLayer))
                 {
-                    light = l;
+                    light = inLight;
                     return true;
+                }
+            }
+            else
+            {
+                foreach (var l in Stage.instance.currLights)
+                {
+                    ray.direction = l.position - hit.point;
+                    ray.origin = hit.point;
+                    if (InLight(ray, l) && Physics.Raycast(ray, out hit, 1000, Stage.platformLayer))
+                    {
+                        light = l;
+                        return true;
+                    }
                 }
             }
         }
