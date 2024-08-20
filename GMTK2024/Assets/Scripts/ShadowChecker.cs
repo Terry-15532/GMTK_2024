@@ -7,7 +7,7 @@ public class ShadowChecker : MonoBehaviour{
 	public Transform[] top, right, bottom, left; //监测点
 
 	public float maxDist = 0.5f; //最大Dist(监测点与影子边缘的距离)，防止出现底部监测点在角色水平移动时进到影子里导致瞬移的情况
-	public float angleBuffer = 2f;
+	public float angleBuffer = 0.5f;
 
 	// public bool HitTop(out float dist){
 	// 	foreach (var t in top){
@@ -190,13 +190,7 @@ public class ShadowChecker : MonoBehaviour{
 			foreach (var l in Stage.instance.currLights){
 				ray.direction = l.position - hit.point;
 				ray.origin = hit.point;
-				// Debug.DrawRay(ray.origin, ray.direction, Color.cyan, 0.01f);
-				// Vector3 normal = Vector3.forward;
-				Vector3 normal = l.transform.forward;
-
-				float angle = Vector3.Angle(-ray.direction, normal);
-				float light_angle = l.GetComponent<Light>().innerSpotAngle / 2;
-				if ((Physics.Raycast(ray, 1000, Stage.platformLayer) && InLight(ray, l))){
+				if (InLight(ray, l) && Physics.Raycast(ray, 1000, Stage.platformLayer)){
 					return true;
 				}
 			}
@@ -208,8 +202,8 @@ public class ShadowChecker : MonoBehaviour{
 	public bool InLight(Ray ray, Transform l){
 		Vector3 normal = l.transform.forward;
 		float angle = Vector3.Angle(-ray.direction, normal);
-		float light_angle = l.GetComponent<Light>().innerSpotAngle / 2;
-		return Mathf.Abs(angle) + angleBuffer <= light_angle;
+		float light_angle = l.GetComponent<Light>().spotAngle / 2;
+		return Mathf.Abs(angle) - angleBuffer <= light_angle;
 	}
 
 	public bool InAnyLight(Ray ray){
