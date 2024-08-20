@@ -226,7 +226,7 @@ public class ShadowChecker : MonoBehaviour
                 ray.origin = hit.point;
                 if (InLight(ray, inLight) && Physics.Raycast(ray, out hit, 1000, Stage.platformLayer))
                 {
-                    Debug.Log(hit.collider.name);
+                    // Debug.Log(hit.collider.name);
                     light = inLight;
                     return true;
                 }

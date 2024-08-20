@@ -8674,7 +8674,6 @@ MonoBehaviour:
   index: 0
   maxScalingOperation: 1000
   scalingOperationLeft: 0
-  platformZ: 0
   updateShadowTrigger:
     m_PersistentCalls:
       m_Calls: []
@@ -39788,11 +39787,14 @@ MonoBehaviour:
   maxZ: -131.95
   minZ: -135.67
   scrollSpeed: 2
+  showOutlineAlways: 1
+  margin: 0.1
   initPos: {x: 0, y: 0, z: 0}
   isDragging: 0
   outline: {fileID: 0}
   character: {fileID: 0}
   mouseOn: 0
+  mr: {fileID: 0}
 --- !u!4 &1014157066 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1468027767883778103, guid: f3046a225882b7b40a62b3ac164f9185, type: 3}
@@ -49851,11 +49853,14 @@ MonoBehaviour:
   maxZ: -131.95
   minZ: -137.68
   scrollSpeed: 2
+  showOutlineAlways: 1
+  margin: 0.1
   initPos: {x: 0, y: 0, z: 0}
   isDragging: 0
   outline: {fileID: 0}
   character: {fileID: 0}
   mouseOn: 0
+  mr: {fileID: 0}
 --- !u!1001 &1259632189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -81470,7 +81475,6 @@ MonoBehaviour:
   index: 0
   maxScalingOperation: 0
   scalingOperationLeft: 0
-  platformZ: -127.3896
   updateShadowTrigger:
     m_PersistentCalls:
       m_Calls: []

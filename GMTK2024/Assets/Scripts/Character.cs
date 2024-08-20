@@ -31,9 +31,9 @@ public class Character : MonoBehaviour
 
     public static readonly int falling = Animator.StringToHash("Falling");
 
-    private static readonly int running = Animator.StringToHash("Running");
+    public static readonly int running = Animator.StringToHash("Running");
 
-    private static readonly int jumping = Animator.StringToHash("Jumping");
+    public static readonly int jumping = Animator.StringToHash("Jumping");
     private int collisionCount = 0;
     public bool movingLight = false;
 
@@ -174,7 +174,7 @@ public class Character : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (!movingLight)
+        if (!movingLight && StartGate.started)
         {
             var top = checker.HitTop(out float topDist);
             var bottom = checker.HitBottom(out float bottomDist);

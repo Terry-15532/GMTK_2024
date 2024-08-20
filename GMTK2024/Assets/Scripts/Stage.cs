@@ -21,7 +21,9 @@ public class Stage : MonoBehaviour{
 	public int scalingOperationLeft;
 
 	[HideInInspector]
-	public float platformZ;
+	public float platformZ{
+		get{ return Character.instance.transform.position.z; }
+	}
 
 	public static Stage instance;
 	[FormerlySerializedAs("updateShadow")] public UnityEvent updateShadowTrigger = new();
@@ -34,7 +36,7 @@ public class Stage : MonoBehaviour{
 		wallLayer = 1 << LayerMask.NameToLayer("Wall");
 		platformLayer = 1 << LayerMask.NameToLayer("Platform");
 		scalingOperationLeft = maxScalingOperation;
-		platformZ = Character.instance.transform.position.z;
+		// platformZ = Character.instance.transform.position.z;
 	}
 
     private void Start()
