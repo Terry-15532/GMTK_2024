@@ -193,7 +193,12 @@ public class Character : MonoBehaviour{
 			if (bottom){
 				StopAllCoroutines();
 				shadowGrounded = true;
+				if (!shadowMode){
+					SoundSys.PlaySound("ShadowMode");
+				}
+
 				shadowMode = true;
+
 				if (finalV.y <= 0){
 					finalV.y = top ? 3 : 0;
 					transform.position += new Vector3(0, bottomDist, 0);

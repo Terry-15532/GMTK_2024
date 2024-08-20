@@ -21,13 +21,13 @@ public class Ending : MonoBehaviour{
 	void OnTriggerEnter(Collider collider){
 		// animator.Play("FadeIn");
 		image.SetActive(true);
-		image.SetAttrAni(0, 1, 3f, ColorAttr.a);
-		Tools.CallDelayed(() => { image.SetAttrAni(1, 0, 3f, ColorAttr.a); }, 3f);
+		image.SetAttrAni(0, 1, 1.5f, ColorAttr.a);
+		// Tools.CallDelayed(() => { image.SetAttrAni(1, 0, 3f, ColorAttr.a); }, 3f);
 		Tools.CallDelayed(() => {
 			// image.SetAttrAni(1, 0, 3f, ColorAttr.a);
-			SceneSwitching.SwitchTo("Level_1");
 			StartGate.started = false;
-		}, 6f);
+			SceneSwitching.SwitchTo("Level_1");
+		}, 3f);
 		// StartCoroutine(endingWait());
 	}
 
