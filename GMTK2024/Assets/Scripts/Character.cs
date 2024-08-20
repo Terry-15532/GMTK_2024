@@ -55,7 +55,7 @@ public class Character : MonoBehaviour{
 		Stage.instance.resetStage.AddListener(Reset);
 	}
 
-	public void OnCollisionEnter(Collision other){
+	public void OnCollisionStay(Collision other){
 		// collisionCount++;
 		shadowMode = false;
 		if (other.contacts.Any(contact => contact.point.y < transform.position.y - 0.55f)){

@@ -20,7 +20,7 @@ public class Stage : MonoBehaviour{
 	[HideInInspector]
 	public int scalingOperationLeft;
 
-	[Header("平台所在面的Z坐标，用于计算角色阴影模式")]
+	[HideInInspector]
 	public float platformZ;
 
 	public static Stage instance;
@@ -34,6 +34,7 @@ public class Stage : MonoBehaviour{
 		wallLayer = 1 << LayerMask.NameToLayer("Wall");
 		platformLayer = 1 << LayerMask.NameToLayer("Platform");
 		scalingOperationLeft = maxScalingOperation;
+		platformZ = Character.instance.transform.position.z;
 	}
 
     private void Start()
