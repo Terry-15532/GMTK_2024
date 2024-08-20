@@ -14,6 +14,8 @@ public class ScalableObject : CustomElement{
 
 	[Header("初始大小")] public float currScale;
 
+	[Header("始终显示描边")] public bool showOutlineAlways = true;
+
 	[HideInInspector] public Outline outline; //这是QuickOutline插件，显示描边用的
 	[HideInInspector] public bool mouseOver = false;
 
@@ -35,6 +37,10 @@ public class ScalableObject : CustomElement{
 	}
 
 	public void Update(){
+		if (showOutlineAlways && !outline.enabled){
+			outline.enabled = true;
+		}
+
 		if (mouseOver){
 			if (currScale < maxScaleRatio && Input.GetKeyDown(KeyCode.Mouse0)){
 				// Debug.Log("Larger");
