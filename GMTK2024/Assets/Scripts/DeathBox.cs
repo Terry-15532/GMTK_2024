@@ -20,6 +20,7 @@ public class DeathBox : MonoBehaviour
             // Debug.Log("triggered");
             triggered = true;
             StopAllCoroutines();
+            GetComponent<AudioSource>().Play();
             Character.instance.canMove = false;
             Character.instance.rb.linearVelocity = Vector3.zero;
             Character.instance.GetComponentInParent<Collider>().enabled = false;
