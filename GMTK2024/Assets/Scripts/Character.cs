@@ -36,11 +36,18 @@ public class Character : MonoBehaviour
     private static readonly int jumping = Animator.StringToHash("Jumping");
     private int collisionCount = 0;
     public bool movingLight = false;
+	public bool canMove = true;
 
     public void Reset()
     {
         transform.position = initPos;
         rb.linearVelocity = Vector3.zero;
+		rb.useGravity = false;
+		gameObject.layer = LayerMask.NameToLayer("Default");
+		canMove = true;
+		gameObject.transform.rotation = Quaternion.identity;
+		rb.freezeRotation = true;
+		GetComponentInParent<Collider>().enabled = true;
     }
 
     public void Awake()
@@ -163,7 +170,7 @@ public class Character : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && canMove)
         {
             jumpKeyDown = true;
             jumpKeyPressedTime = Time.unscaledTime;
@@ -174,7 +181,7 @@ public class Character : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (!movingLight)
+        if (!movingLight && canMove)
         {
             var top = checker.HitTop(out float topDist);
             var bottom = checker.HitBottom(out float bottomDist);
