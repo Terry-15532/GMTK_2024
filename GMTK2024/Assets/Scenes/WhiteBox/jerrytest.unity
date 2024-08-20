@@ -5642,15 +5642,15 @@ PrefabInstance:
     - target: {fileID: 2419596085399616093, guid: ac3260422d42f984290a31863fc4f319, type: 3}
       propertyPath: sr
       value: 
-      objectReference: {fileID: 891269477}
+      objectReference: {fileID: 0}
     - target: {fileID: 2419596085399616093, guid: ac3260422d42f984290a31863fc4f319, type: 3}
       propertyPath: model
       value: 
-      objectReference: {fileID: 154461478}
+      objectReference: {fileID: 1526341930}
     - target: {fileID: 2419596085399616093, guid: ac3260422d42f984290a31863fc4f319, type: 3}
       propertyPath: animator
       value: 
-      objectReference: {fileID: 891269476}
+      objectReference: {fileID: 0}
     - target: {fileID: 2419596085399616093, guid: ac3260422d42f984290a31863fc4f319, type: 3}
       propertyPath: jumpforce
       value: 5
@@ -10656,6 +10656,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4383683694736562, guid: d9f2f474eb1965f4bb702d045bb9d2d3, type: 3}
   m_PrefabInstance: {fileID: 354519598}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &354694273
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1052494380838110798, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -249.03938
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052494380838110798, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 30.217659
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052494380838110798, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5.6593056
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052494380838110798, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052494380838110798, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052494380838110798, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052494380838110798, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052494380838110798, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052494380838110798, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1052494380838110798, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424940581209906867, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
+      propertyPath: m_Name
+      value: MusicOrchestrator
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
 --- !u!4 &354751876 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 468812, guid: 41eeee7ac6cd71342a13a0fc4a0a0308, type: 3}
@@ -26151,16 +26208,6 @@ Rigidbody:
   m_CorrespondingSourceObject: {fileID: 970071377886860273, guid: ac3260422d42f984290a31863fc4f319, type: 3}
   m_PrefabInstance: {fileID: 198147795}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &891269476 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5550434190998215193, guid: ac3260422d42f984290a31863fc4f319, type: 3}
-  m_PrefabInstance: {fileID: 198147795}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &891269477 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 4910996580863767666, guid: ac3260422d42f984290a31863fc4f319, type: 3}
-  m_PrefabInstance: {fileID: 198147795}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &891269481 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5382698684262760003, guid: ac3260422d42f984290a31863fc4f319, type: 3}
@@ -34289,6 +34336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startMenuCamera: {fileID: 245047036}
+  orchestrator: {fileID: 1399806251}
 --- !u!1001 &1157512218
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42006,6 +42054,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 442146, guid: 94ca6d6ca29cc81419b65c6bf9286a6f, type: 3}
   m_PrefabInstance: {fileID: 1395256837}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1399806251 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4087561001446598960, guid: a3d4a8a2777783d468b773c998f40877, type: 3}
+  m_PrefabInstance: {fileID: 354694273}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fe6657f6b706f04aa09d6ac1c7b4127, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1400291145
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45801,6 +45860,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 461032, guid: ecfc727ab52f6f44da6c79e536989f0f, type: 3}
   m_PrefabInstance: {fileID: 1524016456}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1526341930 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2263263050792586717, guid: ac3260422d42f984290a31863fc4f319, type: 3}
+  m_PrefabInstance: {fileID: 198147795}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1526814970
 PrefabInstance:
@@ -51495,8 +51559,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lightSourceRight: []
   lightSourceLeft: []
-  isFirstLight: 0
-  c: {fileID: 0}
 --- !u!1 &1710729400
 GameObject:
   m_ObjectHideFlags: 0
@@ -65518,3 +65580,4 @@ SceneRoots:
   - {fileID: 245047037}
   - {fileID: 1663945609}
   - {fileID: 1990099748}
+  - {fileID: 354694273}
