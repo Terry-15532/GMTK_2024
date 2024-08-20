@@ -181,10 +181,7 @@ public class Character : MonoBehaviour
 
     public void FixedUpdate()
     {
-<<<<<<< HEAD
-=======
-        if (!movingLight && canMove && started)
->>>>>>> 6dc2f62ebe0de8a56c99a126caddec71847857cf
+        if (!movingLight && canMove && StartGate.started)
         {
             var top = checker.HitTop(out float topDist);
             var bottom = checker.HitBottom(out float bottomDist);
