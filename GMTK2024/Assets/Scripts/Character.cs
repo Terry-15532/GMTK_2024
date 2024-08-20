@@ -201,7 +201,7 @@ public class Character : MonoBehaviour
                 Tools.CallDelayed(() => { animator.SetBool(jumping, false); }, 0.25f);
             }
 
-            if (Time.unscaledTime > jumpKeyPressedTime + 0.1f)
+            if (Time.unscaledTime > jumpKeyPressedTime + 0.3f)
             {
                 jumpKeyDown = false;
             }
