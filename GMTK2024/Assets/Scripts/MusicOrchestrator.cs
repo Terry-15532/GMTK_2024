@@ -9,9 +9,11 @@ public class MusicOrchestrator : MonoBehaviour
     public AudioSource music1loop;
     public AudioSource music2;
     public AudioSource music2loop;
+    public AudioSource music3;
+    public AudioSource music3loop;
     public AudioSource musicFinal;
-    private static bool autoPlay1;
-    private static bool autoPlay2;
+    // private static bool autoPlay1;
+    // private static bool autoPlay2;
 
     private static MusicOrchestrator instance;
 
@@ -21,8 +23,8 @@ public class MusicOrchestrator : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(this);
-            autoPlay1 = false;
-            autoPlay2 = false;
+            // autoPlay1 = false;
+            // autoPlay2 = false;
         }
         else if (instance != this)
         {
@@ -53,22 +55,22 @@ public class MusicOrchestrator : MonoBehaviour
 
     public void transitionTrack1()
     {
-        autoPlay2 = false;
+        // autoPlay2 = false;
         if (menu != null && menu.isPlaying)
         {
             StartCoroutine(FadeOut(menu, 1f, false));
         }
-        StartCoroutine(pauseBeforePlay(music1, 0.8f, 0));
+        StartCoroutine(pauseBeforePlay(music1, 0.8f));
         if (music1loop != null)
         {
-            StartCoroutine(pauseBeforePlay(music1loop, 0.65f + music1.clip.length, 0));
+            StartCoroutine(pauseBeforePlay(music1loop, 0.65f + music1.clip.length));
         }
         
     }
 
     public void transitionTrack2()
     {
-        autoPlay1 = false;
+        // autoPlay1 = false;
         if (menu != null && menu.isPlaying)
         {
             StartCoroutine(FadeOut(menu, 1f, false));
@@ -81,17 +83,44 @@ public class MusicOrchestrator : MonoBehaviour
         {
             StartCoroutine(FadeOut(music1loop, 1f, false));
         }
-        StartCoroutine(pauseBeforePlay(music2, 0.8f, 0));
+        StartCoroutine(pauseBeforePlay(music2, 0.8f));
         if (music2loop != null)
         {
-            StartCoroutine(pauseBeforePlay(music2loop, 0.65f + music2.clip.length, 0));
+            StartCoroutine(pauseBeforePlay(music2loop, 0.65f + music2.clip.length));
+        }
+    }
+
+    public void transitionTrack3()
+    {
+        if (menu != null && menu.isPlaying)
+        {
+            StartCoroutine(FadeOut(menu, 1f, false));
+        }
+        if (music1 != null && music1.isPlaying)
+        {
+            StartCoroutine(FadeOut(music1, 1f, false));
+        }
+        else if (music1loop != null && music1loop.isPlaying)
+        {
+            StartCoroutine(FadeOut(music1loop, 1f, false));
+        }
+        if (music2 != null && music2.isPlaying)
+        {
+            StartCoroutine(FadeOut(music2, 1f, false));
+        }
+        else if (music2loop != null && music2loop.isPlaying)
+        {
+            StartCoroutine(FadeOut(music2loop, 1f, false));
+        }
+        StartCoroutine(pauseBeforePlay(music3, 0.8f));
+        if (music3loop != null)
+        {
+            StartCoroutine(pauseBeforePlay(music3loop, 0.65f + music3.clip.length));
         }
     }
 
     public void transitionEnd()
     {
-        autoPlay1 = false;
-        autoPlay2 = false;
         if (music1 != null && music1.isPlaying)
         {
             StartCoroutine(FadeOut(music1, 1f, false));
@@ -108,7 +137,7 @@ public class MusicOrchestrator : MonoBehaviour
         {
             StartCoroutine(FadeOut(music2loop, 1f, false));
         }
-        StartCoroutine(pauseBeforePlay(musicFinal, 1f, 0));
+        StartCoroutine(pauseBeforePlay(musicFinal, 1f));
     }
 
     public void endMusic()
@@ -136,15 +165,10 @@ public class MusicOrchestrator : MonoBehaviour
         }
     }
 
-    IEnumerator pauseBeforePlay(AudioSource source, float pause, int setAutoplay)
+    IEnumerator pauseBeforePlay(AudioSource source, float pause)
     {
         yield return new WaitForSeconds(pause);
         source.Play();
-        if (setAutoplay == 1) {
-            autoPlay1 = true;
-        } else if (setAutoplay == 2) {
-            autoPlay2 = true;
-        }
     }
 
     //IEnumerator FadeIn(AudioSource audioSource, float FadeTime)
