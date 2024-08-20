@@ -79,7 +79,7 @@ public class MusicOrchestrator : MonoBehaviour
         {
             StartCoroutine(FadeOut(music1, 1f, false));
         }
-        else if (music1loop != null && music1loop.isPlaying)
+        if (music1loop != null && music1loop.isPlaying)
         {
             StartCoroutine(FadeOut(music1loop, 1f, false));
         }
@@ -100,7 +100,7 @@ public class MusicOrchestrator : MonoBehaviour
         {
             StartCoroutine(FadeOut(music1, 1f, false));
         }
-        else if (music1loop != null && music1loop.isPlaying)
+        if (music1loop != null && music1loop.isPlaying)
         {
             StartCoroutine(FadeOut(music1loop, 1f, false));
         }
@@ -108,7 +108,7 @@ public class MusicOrchestrator : MonoBehaviour
         {
             StartCoroutine(FadeOut(music2, 1f, false));
         }
-        else if (music2loop != null && music2loop.isPlaying)
+        if (music2loop != null && music2loop.isPlaying)
         {
             StartCoroutine(FadeOut(music2loop, 1f, false));
         }
@@ -125,15 +125,15 @@ public class MusicOrchestrator : MonoBehaviour
         {
             StartCoroutine(FadeOut(music1, 1f, false));
         }
-        else if (music1loop != null && music1loop.isPlaying)
+        if (music1loop != null && music1loop.isPlaying)
         {
             StartCoroutine(FadeOut(music1loop, 1f, false));
         }
-        else if (music2 != null && music2.isPlaying)
+        if (music2 != null && music2.isPlaying)
         {
             StartCoroutine(FadeOut(music2, 1f, false));
         }
-        else if (music2loop != null && music2loop.isPlaying)
+        if (music2loop != null && music2loop.isPlaying)
         {
             StartCoroutine(FadeOut(music2loop, 1f, false));
         }

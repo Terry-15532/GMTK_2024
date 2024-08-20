@@ -11,6 +11,7 @@ public class StartGate : CustomElement{
 	public Vector3 endingPos, endingScale, characterTargetPos;
 
 	public GameObject checkPoint0;
+	public MusicOrchestrator orchestrator;
 
 	public void Start(){
 		// Character.instance.enabled = false;
@@ -41,6 +42,7 @@ public class StartGate : CustomElement{
 		Character.instance.rb.linearVelocity = v / 5f;
 		Debug.Log(v);
 		Character.instance.animator.SetBool(Character.running, true);
+		orchestrator.transitionTrack1();
 		CallDelayed(() => {
 			Character.instance.rb.linearVelocity = Vector3.zero;
 			// Character.instance.enabled = true;
