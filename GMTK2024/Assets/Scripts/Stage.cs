@@ -9,16 +9,15 @@ public class Stage : MonoBehaviour{
 	public static int wallLayer;
 	public static int platformLayer;
 
-	[Header("初始灯光组")]
-	public Transform[] currLights;
+	[Header("初始灯光组")] public Transform[] currLights;
 
 	public int index;
 
-	[Header("最大缩放次数")]
-	public int maxScalingOperation;
-	
-	[HideInInspector]
-	public int scalingOperationLeft;
+	[Header("最大缩放次数")] public int maxScalingOperation;
+
+	[HideInInspector] public int scalingOperationLeft;
+
+	public static bool canReset = true;
 
 	[HideInInspector]
 	public float platformZ{
@@ -39,27 +38,27 @@ public class Stage : MonoBehaviour{
 		// platformZ = Character.instance.transform.position.z;
 	}
 
-    private void Start()
-    {
-        showOutline.Invoke();
-    }
+	private void Start(){
+		showOutline.Invoke();
+	}
 
-    // public void Reset(){
-    // 	resetStage.Invoke();
-    // }
+	// public void Reset(){
+	// 	resetStage.Invoke();
+	// }
 
-    // public void ShowOutline(){
-    // 	showOutline.Invoke();
-    // }
+	// public void ShowOutline(){
+	// 	showOutline.Invoke();
+	// }
 
-    public void Update(){
+	public void Update(){
 		if (Input.GetKeyDown(KeyCode.O)){
 			showOutline.Invoke();
 		}
 
 		if (Input.GetKeyDown(KeyCode.R)){
-			resetStage.Invoke();
+			if (canReset){
+				resetStage.Invoke();
+			}
 		}
 	}
-
 }

@@ -18,6 +18,7 @@ public class DeathBox : MonoBehaviour
     {
         if (!triggered) {
             // Debug.Log("triggered");
+            Stage.canReset = false;
             triggered = true;
             StopAllCoroutines();
             GetComponent<AudioSource>().Play();
@@ -28,7 +29,10 @@ public class DeathBox : MonoBehaviour
             Character.instance.rb.angularVelocity = Random.onUnitSphere * 10;
             Character.instance.rb.linearVelocity = Vector3.up * 3;
             Character.instance.rb.useGravity = true;
-            CallDelayed(() => {FadeOut(0.2f, 0.2f, 0.5f);}, 1f);
+            CallDelayed(() => {
+                FadeOut(0.2f, 0.2f, 0.5f);
+                Stage.canReset = true;
+            }, 1f);
         }
     }
 

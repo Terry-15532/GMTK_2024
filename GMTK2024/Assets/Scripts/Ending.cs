@@ -27,6 +27,7 @@ public class Ending : MonoBehaviour{
 			// image.SetAttrAni(1, 0, 3f, ColorAttr.a);
 			StartGate.started = false;
 			SceneSwitching.SwitchTo("Level_1");
+			MusicOrchestrator.instance.transitionTrack0();
 		}, 3f);
 		// StartCoroutine(endingWait());
 	}

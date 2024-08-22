@@ -2463,6 +2463,7 @@ GameObject:
   - component: {fileID: 211925009}
   - component: {fileID: 211925008}
   - component: {fileID: 211925011}
+  - component: {fileID: 211925012}
   m_Layer: 0
   m_Name: CheckPoint1
   m_TagString: Untagged
@@ -2534,6 +2535,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1663384588}
+--- !u!114 &211925012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 211925007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e99ac15516d24c7fa7d55b0a3535184a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxScalingCount: 0
 --- !u!1001 &238585656
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16753,6 +16767,7 @@ GameObject:
   - component: {fileID: 1708134212}
   - component: {fileID: 1708134211}
   - component: {fileID: 1708134210}
+  - component: {fileID: 1708134214}
   m_Layer: 0
   m_Name: CheckPoint2
   m_TagString: Untagged
@@ -16824,6 +16839,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1708134214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708134209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e99ac15516d24c7fa7d55b0a3535184a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxScalingCount: 0
 --- !u!1001 &1727251889
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19108,11 +19136,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ReferenceResolution: {x: 2560, y: 1440}
+  m_ScreenMatchMode: 2
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96

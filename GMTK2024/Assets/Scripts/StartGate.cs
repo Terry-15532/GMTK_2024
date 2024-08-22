@@ -4,20 +4,20 @@ using static Tools;
 
 [RequireComponent(typeof(Outline))]
 public class StartGate : CustomElement{
-	public static bool started = false;
+	public static bool started = true;
 
 	public Outline outline;
 
 	public Vector3 endingPos, endingScale, characterTargetPos;
 
 	public GameObject checkPoint0;
-	public MusicOrchestrator orchestrator;
 
 	public void Start(){
 		// Character.instance.enabled = false;
 		outline = GetComponent<Outline>();
 		checkPoint0.SetActive(false);
 		outline.enabled = false;
+		started = false;
 	}
 
 	public void OnMouseEnter(){
@@ -42,8 +42,10 @@ public class StartGate : CustomElement{
 		Character.instance.rb.linearVelocity = v / 5f;
 		Debug.Log(v);
 		Character.instance.animator.SetBool(Character.running, true);
-		orchestrator.transitionTrack1();
-		CallDelayed(() => {
+		MusicOrchestrator.instance.transitionTrack1();
+		Stage.canReset = false;
+		CallDelayedAsync(() => {
+			Stage.canReset = true;
 			Character.instance.rb.linearVelocity = Vector3.zero;
 			// Character.instance.enabled = true;
 			Character.instance.animator.SetBool(Character.running, false);
